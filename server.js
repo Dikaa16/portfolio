@@ -98,6 +98,41 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+// Cloudinary cleanup: delete images that no item uses anymore
+const IMAGE_FIELDS = ['coverImage', 'imageUrl', 'thumbnail', 'logoUrl'];
+const IMAGE_MODELS = [BlogPost, Photography, Video, Experience, Project, Creative];
+
+// Only images this app uploaded (our cloud, under portfolio/) are ever deleted
+const cloudinaryPublicId = (url) => {
+  if (typeof url !== 'string') return null;
+  const prefix = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/`;
+  if (!url.startsWith(prefix)) return null;
+  const match = url.slice(prefix.length).match(/(?:^|\/)v\d+\/(portfolio\/.+)\.[a-z0-9]+$/i);
+  return match ? match[1] : null;
+};
+
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const isImageInUse = async (url) => {
+  const inFields = await Promise.all(IMAGE_MODELS.flatMap(Model =>
+    IMAGE_FIELDS.filter(field => Model.schema.path(field)).map(field => Model.exists({ [field]: url }))
+  ));
+  if (inFields.some(Boolean)) return true;
+  return Boolean(await BlogPost.exists({ content: { $regex: escapeRegex(url) } }));
+};
+
+// Call after the DB change. Pass the updated doc to only remove replaced images.
+const cleanupImages = (oldDoc, newDoc = null) => {
+  for (const field of IMAGE_FIELDS) {
+    const url = oldDoc?.[field];
+    const publicId = cloudinaryPublicId(url);
+    if (!publicId || newDoc?.[field] === url) continue;
+    isImageInUse(url)
+      .then(inUse => inUse ? null : cloudinary.uploader.destroy(publicId))
+      .catch(error => console.error('Cloudinary cleanup error:', error));
+  }
+};
+
 // Multer stores file in memory temporarily (no disk needed)
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -194,13 +229,14 @@ app.post('/api/blog', authMiddleware, async (req, res) => {
 
 app.put('/api/blog/:id', authMiddleware, async (req, res) => {
   try {
-    const was = await BlogPost.findById(req.params.id).select('published');
+    const was = await BlogPost.findById(req.params.id);
     if (!was) return res.status(404).json({ message: 'Not found' });
     if (req.body.published && !was.published && !req.body.publishedAt) {
       req.body.publishedAt = new Date();
     }
     const post = await BlogPost.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!post) return res.status(404).json({ message: 'Not found' });
+    cleanupImages(was, post);
     res.json(post);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -211,6 +247,7 @@ app.delete('/api/blog/:id', authMiddleware, async (req, res) => {
   try {
     const post = await BlogPost.findByIdAndDelete(req.params.id);
     if (!post) return res.status(404).json({ message: 'Not found' });
+    cleanupImages(post);
     res.json({ message: 'Deleted' });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -248,8 +285,11 @@ app.post('/api/photography', authMiddleware, async (req, res) => {
 
 app.put('/api/photography/:id', authMiddleware, async (req, res) => {
   try {
+    const old = await Photography.findById(req.params.id);
+    if (!old) return res.status(404).json({ message: 'Not found' });
     const photo = await Photography.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!photo) return res.status(404).json({ message: 'Not found' });
+    cleanupImages(old, photo);
     res.json(photo);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -260,6 +300,7 @@ app.delete('/api/photography/:id', authMiddleware, async (req, res) => {
   try {
     const photo = await Photography.findByIdAndDelete(req.params.id);
     if (!photo) return res.status(404).json({ message: 'Not found' });
+    cleanupImages(photo);
     res.json({ message: 'Deleted' });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -297,8 +338,11 @@ app.post('/api/videos', authMiddleware, async (req, res) => {
 
 app.put('/api/videos/:id', authMiddleware, async (req, res) => {
   try {
+    const old = await Video.findById(req.params.id);
+    if (!old) return res.status(404).json({ message: 'Not found' });
     const video = await Video.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!video) return res.status(404).json({ message: 'Not found' });
+    cleanupImages(old, video);
     res.json(video);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -309,6 +353,7 @@ app.delete('/api/videos/:id', authMiddleware, async (req, res) => {
   try {
     const video = await Video.findByIdAndDelete(req.params.id);
     if (!video) return res.status(404).json({ message: 'Not found' });
+    cleanupImages(video);
     res.json({ message: 'Deleted' });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -347,8 +392,11 @@ app.post('/api/experience', authMiddleware, async (req, res) => {
 
 app.put('/api/experience/:id', authMiddleware, async (req, res) => {
   try {
+    const old = await Experience.findById(req.params.id);
+    if (!old) return res.status(404).json({ message: 'Not found' });
     const exp = await Experience.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!exp) return res.status(404).json({ message: 'Not found' });
+    cleanupImages(old, exp);
     res.json(exp);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -359,6 +407,7 @@ app.delete('/api/experience/:id', authMiddleware, async (req, res) => {
   try {
     const exp = await Experience.findByIdAndDelete(req.params.id);
     if (!exp) return res.status(404).json({ message: 'Not found' });
+    cleanupImages(exp);
     res.json({ message: 'Deleted' });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -396,8 +445,11 @@ app.post('/api/projects', authMiddleware, async (req, res) => {
 
 app.put('/api/projects/:id', authMiddleware, async (req, res) => {
   try {
+    const old = await Project.findById(req.params.id);
+    if (!old) return res.status(404).json({ message: 'Not found' });
     const project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!project) return res.status(404).json({ message: 'Not found' });
+    cleanupImages(old, project);
     res.json(project);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -408,6 +460,7 @@ app.delete('/api/projects/:id', authMiddleware, async (req, res) => {
   try {
     const project = await Project.findByIdAndDelete(req.params.id);
     if (!project) return res.status(404).json({ message: 'Not found' });
+    cleanupImages(project);
     res.json({ message: 'Deleted' });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -543,8 +596,11 @@ app.post('/api/creatives', authMiddleware, async (req, res) => {
 
 app.put('/api/creatives/:id', authMiddleware, async (req, res) => {
   try {
+    const old = await Creative.findById(req.params.id);
+    if (!old) return res.status(404).json({ message: 'Not found' });
     const creative = await Creative.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!creative) return res.status(404).json({ message: 'Not found' });
+    cleanupImages(old, creative);
     res.json(creative);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -555,6 +611,7 @@ app.delete('/api/creatives/:id', authMiddleware, async (req, res) => {
   try {
     const creative = await Creative.findByIdAndDelete(req.params.id);
     if (!creative) return res.status(404).json({ message: 'Not found' });
+    cleanupImages(creative);
     res.json({ message: 'Deleted' });
   } catch (error) {
     res.status(500).json({ message: error.message });
