@@ -121,7 +121,6 @@ function ImageUpload({ value, onChange, folder, label = 'Image URL' }) {
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
             whiteSpace: 'nowrap',
-            cursor: uploading ? 'wait' : 'pointer'
           }}
         >
           {uploading ? 'Uploading...' : '📁 Upload'}
@@ -779,7 +778,6 @@ function Admin() {
                         border: typeFilter === type ? '2px solid var(--accent)' : '2px solid var(--border)',
                         background: typeFilter === type ? 'var(--accent)' : 'transparent',
                         color: typeFilter === type ? 'white' : 'var(--text)',
-                        cursor: 'pointer',
                         fontFamily: 'var(--font-mono)',
                         textTransform: 'uppercase',
                         fontSize: '0.75rem'

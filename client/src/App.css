@@ -2163,6 +2163,19 @@ html {
   }
 }
 
+/* DESKTOP CURSOR LOCK - keep the system cursor hidden in every state
+   (active, disabled, file inputs) so only the custom cursor shows */
+@media (min-width: 969px) {
+  *, *::before, *::after, ::file-selector-button {
+    cursor: none !important;
+  }
+
+  /* Native link/image dragging shows the OS cursor and ignores CSS */
+  a, img {
+    -webkit-user-drag: none;
+  }
+}
+
 /* MOBILE CURSOR OVERRIDE - must be last to override all cursor: none */
 @media (max-width: 968px) {
   *, *::before, *::after,
