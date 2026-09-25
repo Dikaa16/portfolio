@@ -31,6 +31,7 @@ function CustomCursor() {
 
   useEffect(() => {
     const handleMove = (e) => {
+      if (e.pointerType !== 'mouse') return; // touch/pen taps shouldn't drag the ring around
       mouseX.set(e.clientX - 10);
       mouseY.set(e.clientY - 10);
       setVisible(true);
