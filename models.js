@@ -305,6 +305,24 @@ const creativeSchema = new mongoose.Schema({
   timestamps: true
 });
 
+// Site-wide settings, stored as a single document (key: 'site')
+const settingsSchema = new mongoose.Schema({
+  key: {
+    type: String,
+    required: true,
+    unique: true,
+    default: 'site'
+  },
+  // Theme id from the client's theme registry; unknown ids fall back to the default there
+  theme: {
+    type: String,
+    default: 'classic',
+    match: /^[a-z0-9-]{1,40}$/
+  }
+}, {
+  timestamps: true
+});
+
 export const BlogPost = mongoose.model('BlogPost', blogPostSchema);
 export const Photography = mongoose.model('Photography', photographySchema);
 export const Video = mongoose.model('Video', videoSchema);
@@ -313,3 +331,4 @@ export const Project = mongoose.model('Project', projectSchema);
 export const Skill = mongoose.model('Skill', skillSchema);
 export const Course = mongoose.model('Course', courseSchema);
 export const Creative = mongoose.model('Creative', creativeSchema);
+export const Settings = mongoose.model('Settings', settingsSchema);

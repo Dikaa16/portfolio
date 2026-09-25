@@ -10,6 +10,7 @@ import { errorHandler } from './lib/http.js';
 import { createCrudRouter } from './routes/crud.js';
 import blogRouter from './routes/blog.js';
 import adminRouter from './routes/admin.js';
+import settingsRouter from './routes/settings.js';
 
 dotenv.config();
 configureCloudinary();
@@ -54,6 +55,7 @@ app.get('/api/health', (req, res) => res.json({ status: 'OK' }));
 
 app.use('/api', adminRouter);
 app.use('/api/blog', blogRouter);
+app.use('/api/settings', settingsRouter);
 app.use('/api/photography', createCrudRouter(Photography));
 app.use('/api/videos', createCrudRouter(Video));
 app.use('/api/experience', createCrudRouter(Experience, {
