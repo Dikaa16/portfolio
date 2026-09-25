@@ -4,6 +4,22 @@
    html[data-theme="<id>"] so other themes are unaffected.
    ============================================= */
 
+/* Dark themes: black single-colour logos (GitHub, Express, ...) would vanish,
+   so show them in soft white, like brands' official white variants.
+   TechTag detects these icons; colourful logos are left untouched. */
+html[data-mode="dark"] .tech-icon--mono-dark {
+  filter: brightness(0) invert(0.9);
+}
+
+html[data-mode="dark"] .tech-tag:hover .tech-icon--mono-dark {
+  filter: brightness(0) invert(0.05);
+}
+
+/* Dark but coloured logos keep their brand hue, just lifted */
+html[data-mode="dark"] .tech-icon--dark-color {
+  filter: brightness(1.8) saturate(1.15);
+}
+
 /* Dark themes: the primary button uses the accent instead of near-white */
 html[data-mode="dark"] .btn-primary {
   background: var(--accent);
