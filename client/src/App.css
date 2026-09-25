@@ -825,20 +825,24 @@ html {
   opacity: var(--glow-opacity);
 }
 
+/* Sized to the screen (capped at the desktop size) so on phones the two
+   circles stay in opposite corners instead of overlapping into one shape */
 .bg-circle-1 {
-  width: 600px;
-  height: 600px;
+  --size: min(600px, 90vmin);
+  width: var(--size);
+  height: var(--size);
   background: linear-gradient(135deg, var(--glow-1) 0%, var(--glow-2) 100%);
-  top: -200px;
-  right: -200px;
+  top: calc(var(--size) / -3);
+  right: calc(var(--size) / -3);
 }
 
 .bg-circle-2 {
-  width: 800px;
-  height: 800px;
+  --size: min(800px, 110vmin);
+  width: var(--size);
+  height: var(--size);
   background: linear-gradient(225deg, var(--glow-1) 0%, var(--glow-2) 100%);
-  bottom: -300px;
-  left: -300px;
+  bottom: calc(var(--size) * -0.375);
+  left: calc(var(--size) * -0.375);
 }
 
 /* RESPONSIVE */
