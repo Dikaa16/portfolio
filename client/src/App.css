@@ -19,7 +19,11 @@
 
   /* Theme tokens. Defaults are the Classic theme; src/themes overrides them at runtime */
   --surface-raised: #ffffff;
-  --on-accent: var(--secondary);
+  /* Accent split for readability: --accent fills, --accent-text is gold text on
+     light surfaces (WCAG AA 4.5:1), --accent-display is for large headlines (3:1) */
+  --accent-text: #8a6b16;
+  --accent-display: #a8841f;
+  --on-accent: #1a1a1a;
   --nav-bg: color-mix(in srgb, var(--secondary) 95%, transparent);
   --shadow-color: rgba(0, 0, 0, 0.1);
   --shadow-soft: rgba(0, 0, 0, 0.05);
@@ -153,7 +157,7 @@ html[data-pattern="dots"] body {
 
 .nav-links a:hover,
 .nav-links a.active {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .nav-links a:hover::after,
@@ -198,7 +202,7 @@ html {
 }
 
 .hero-title .accent {
-  color: var(--accent);
+  color: var(--accent-display);
 }
 
 .hero-description {
@@ -236,7 +240,7 @@ html {
 .btn:hover {
   background: var(--accent);
   border-color: var(--accent);
-  color: var(--secondary);
+  color: var(--on-accent);
 }
 
 .hero-photo {
@@ -340,7 +344,7 @@ html {
 .experience-role {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-text);
   margin-bottom: 0.75rem;
   text-align: center;
 }
@@ -389,7 +393,7 @@ html {
 .tech-tag:hover {
   border-color: var(--accent);
   background: var(--accent);
-  color: var(--secondary);
+  color: var(--on-accent);
 }
 
 .tech-icon {
@@ -404,8 +408,8 @@ html {
   bottom: 1.5rem;
   right: 1.5rem;
   background: transparent;
-  border: 2px solid var(--accent);
-  color: var(--accent);
+  border: 2px solid var(--accent-text);
+  color: var(--accent-text);
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -444,7 +448,7 @@ html {
 
 .expand-btn:hover {
   background: var(--accent);
-  color: var(--secondary);
+  color: var(--on-accent);
 }
 
 /* Expanded Content */
@@ -478,7 +482,7 @@ html {
   content: '▹';
   position: absolute;
   left: 0;
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 1.2rem;
 }
 
@@ -608,7 +612,7 @@ html {
   font-size: 0.85rem;
   text-transform: uppercase;
   text-decoration: none;
-  color: var(--accent);
+  color: var(--accent-text);
   letter-spacing: 0.1em;
   transition: color 0.3s;
 }
@@ -785,7 +789,7 @@ html {
 }
 
 .social-links a:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* CUSTOM CURSOR - RING ONLY */
@@ -1078,7 +1082,7 @@ html {
 }
 
 .blog-post-content a {
-  color: var(--accent);
+  color: var(--accent-text);
   text-decoration: underline;
   text-underline-offset: 3px;
   transition: color 0.3s;
@@ -1165,7 +1169,7 @@ html {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #888;
+  color: #9da7b3;
   background: rgba(255,255,255,0.08);
   border-radius: 0 var(--radius) 0 var(--radius);
   z-index: 1;
@@ -1327,7 +1331,7 @@ html {
 
 .search-input:focus {
   outline: none;
-  border-color: var(--accent);
+  border-color: var(--accent-text);
 }
 
 .blog-filters {
@@ -1363,7 +1367,7 @@ html {
 
 .creatives-search-clear:hover {
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* Filter Row */
@@ -1405,7 +1409,7 @@ html {
 
 .filter-btn:hover {
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .filter-btn.active {
@@ -1524,7 +1528,7 @@ html {
   letter-spacing: 0.1em;
   padding: 0.3rem 0.8rem;
   border: 1px solid var(--accent);
-  color: var(--accent);
+  color: var(--accent-text);
   border-radius: 3px;
   margin-bottom: 1rem;
 }
@@ -1532,7 +1536,7 @@ html {
 .photo-flip-link {
   font-family: var(--font-mono);
   font-size: 0.85rem;
-  color: var(--accent);
+  color: var(--accent-text);
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -1756,7 +1760,7 @@ html {
   display: inline-block;
   font-family: var(--font-mono);
   font-size: 0.85rem;
-  color: var(--accent);
+  color: var(--accent-text);
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -1911,7 +1915,7 @@ html {
 .blog-post-content .admonition-warning,
 .blog-post-content .admonition-caution,
 .blog-post-content .admonition-attention {
-  --admon: #FF9800; --admon-bg: #fff8e1; --admon-title: #E65100;
+  --admon: #FF9800; --admon-bg: #fff8e1; --admon-title: #bf4700;
 }
 
 .blog-post-content .admonition-danger,
@@ -1946,7 +1950,7 @@ html[data-mode="dark"] .blog-post-content .admonition {
   font-size: 0.75em;
   vertical-align: super;
   text-decoration: none;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
 }
 
@@ -1973,6 +1977,6 @@ html[data-mode="dark"] .blog-post-content .admonition {
 .blog-post-content section[data-footnotes] [data-footnote-backref] {
   font-family: var(--font-mono);
   text-decoration: none;
-  color: var(--accent);
+  color: var(--accent-text);
   margin-left: 0.25rem;
 }

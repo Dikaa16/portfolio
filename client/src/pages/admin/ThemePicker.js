@@ -8,6 +8,8 @@ import { actionErrorMessage } from '../../lib/api';
 function ThemePreview({ theme }) {
   const { colors, fonts } = theme;
   const radius = theme.tokens?.radius || '8px';
+  const accentText = theme.tokens?.['accent-text'] || colors.accent;
+  const accentDisplay = theme.tokens?.['accent-display'] || accentText;
   return (
     <div
       className="theme-preview"
@@ -17,16 +19,16 @@ function ThemePreview({ theme }) {
       <div className="theme-preview-nav" style={{ borderColor: colors.border }}>
         <span style={{ fontFamily: fonts.display, color: colors.primary }}>ASP</span>
         <span className="theme-preview-links" style={{ fontFamily: fonts.mono }}>
-          <b style={{ color: colors.accent }}>Home</b> Blog
+          <b style={{ color: accentText }}>Home</b> Blog
         </span>
       </div>
       <div className="theme-preview-title" style={{ fontFamily: fonts.display, color: colors.primary }}>
-        Andika <span style={{ color: colors.accent }}>Putra</span>
+        Andika <span style={{ color: accentDisplay }}>Putra</span>
       </div>
       <div className="theme-preview-card" style={{ background: colors.background, borderColor: colors.border, borderRadius: radius }}>
         <span className="theme-preview-line" style={{ background: colors.primary }} />
         <span className="theme-preview-line short" style={{ background: colors['text-light'] }} />
-        <span className="theme-preview-chip" style={{ borderColor: colors.accent, color: colors.accent, fontFamily: fonts.mono }}>React</span>
+        <span className="theme-preview-chip" style={{ borderColor: accentText, color: accentText, fontFamily: fonts.mono }}>React</span>
       </div>
     </div>
   );

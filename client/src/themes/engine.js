@@ -2,6 +2,9 @@
 
 // Every theme derives these from its own palette unless it sets them itself
 const DERIVED_TOKENS = {
+  'accent-text': 'var(--accent)',
+  'accent-display': 'var(--accent)',
+  'on-accent': 'var(--secondary)',
   'glow-1': 'var(--accent)',
   'glow-2': 'color-mix(in srgb, var(--accent) 35%, var(--secondary))',
   'callout-bg': 'color-mix(in srgb, var(--accent) 8%, var(--surface-raised))',

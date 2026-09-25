@@ -58,6 +58,7 @@
 
 .login-btn:hover {
   background: var(--accent);
+  color: var(--on-accent);
 }
 
 .error-text {
@@ -150,7 +151,7 @@
 }
 
 .admin-tabs button.active {
-  color: var(--accent);
+  color: var(--accent-text);
   border-bottom-color: var(--accent);
 }
 
@@ -185,7 +186,7 @@
 .view-mode-toggle button.active {
   background: var(--accent);
   border-bottom-color: var(--accent);
-  color: var(--secondary);
+  color: var(--on-accent);
   font-weight: 600;
 }
 
@@ -338,7 +339,7 @@
 
 .btn-reorder:hover:not(:disabled) {
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .btn-reorder:disabled {
@@ -359,8 +360,8 @@
 }
 
 .btn-edit {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--accent-text);
+  color: var(--accent-text);
 }
 
 .btn-edit:hover {
@@ -426,7 +427,7 @@
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: var(--accent);
+  border-color: var(--accent-text);
 }
 
 .form-group textarea {
@@ -748,7 +749,7 @@
   content: '•';
   position: absolute;
   left: 0;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 @media (max-width: 968px) {

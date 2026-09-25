@@ -33,8 +33,11 @@ export const THEMES = [
       mono: "'JetBrains Mono', monospace",
       href: null
     },
-    // Exact original values (other themes derive these from their accent)
+    // Bright gold fills (with charcoal text); deeper golds keep gold text readable
     tokens: {
+      'accent-text': '#8a6b16',
+      'accent-display': '#a8841f',
+      'on-accent': '#1a1a1a',
       'glow-2': '#f4e4b3',
       'callout-bg': '#fffbea',
       'callout-border': '#f0e5c7'
@@ -119,7 +122,7 @@ export const THEMES = [
       text: '#3e2c25',
       'text-light': '#7a5d52',
       border: '#efdccf',
-      accent: '#b8492f'
+      accent: '#ab432b'
     },
     fonts: {
       display: "'DM Serif Display', serif",
@@ -129,7 +132,7 @@ export const THEMES = [
     },
     tokens: {
       'glow-1': '#f2a65a',
-      'glow-2': '#b8492f',
+      'glow-2': '#ab432b',
       'glow-opacity': '0.1',
       radius: '4px'
     }
