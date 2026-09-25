@@ -3,9 +3,9 @@ import axios from 'axios';
 import { API_URL } from '../config';
 import './Admin.css';
 
-function AdminAuth({ onLogin }) {
+function AdminAuth({ onLogin, notice }) {
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(notice || '');
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -46,6 +46,17 @@ function AdminAuth({ onLogin }) {
     </div>
   );
 }
+
+// True if the JWT exists and its exp claim is still in the future
+const isTokenValid = (token) => {
+  if (!token) return false;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    return payload.exp * 1000 > Date.now();
+  } catch {
+    return false;
+  }
+};
 
 const getAuthHeaders = () => ({
   headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
@@ -195,9 +206,32 @@ function Admin() {
   const [adminTagFilter, setAdminTagFilter] = useState('all');
   const [adminCategoryFilter, setAdminCategoryFilter] = useState('all');
 
+  const [authNotice, setAuthNotice] = useState('');
+
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    if (token) setIsAuthenticated(true);
+    if (isTokenValid(localStorage.getItem('adminToken'))) {
+      setIsAuthenticated(true);
+    } else {
+      localStorage.removeItem('adminToken');
+    }
+  }, []);
+
+  // Token expired or rejected mid-session: return to login. Form state is kept,
+  // so unsaved edits are still there after logging back in.
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        const isLogin = error.config?.url?.endsWith('/api/admin/login');
+        if (error.response?.status === 401 && !isLogin) {
+          localStorage.removeItem('adminToken');
+          setAuthNotice('Session expired. Please log in again.');
+          setIsAuthenticated(false);
+        }
+        return Promise.reject(error);
+      }
+    );
+    return () => axios.interceptors.response.eject(interceptor);
   }, []);
 
   useEffect(() => {
@@ -446,7 +480,7 @@ function Admin() {
   };
 
   if (!isAuthenticated) {
-    return <AdminAuth onLogin={() => setIsAuthenticated(true)} />;
+    return <AdminAuth notice={authNotice} onLogin={() => { setAuthNotice(''); setIsAuthenticated(true); }} />;
   }
 
   // Derive available tags and categories from current items
