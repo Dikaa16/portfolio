@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import './App.css';
 import Home from './pages/Home';
 import Blog from './pages/Blog';
@@ -123,47 +123,45 @@ function Navigation() {
   );
 }
 
-function App() {
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+// Custom ring cursor. Position lives in motion values, so moving the mouse
+// animates the ring directly without re-rendering React.
+function CustomCursor() {
+  const [visible, setVisible] = useState(false);
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
+  const spring = { damping: 25, stiffness: 700, mass: 0.2 };
+  const x = useSpring(mouseX, spring);
+  const y = useSpring(mouseY, spring);
 
   useEffect(() => {
-    let animationFrameId;
-
-    const handleMouseMove = (e) => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      animationFrameId = requestAnimationFrame(() => {
-        setCursorPos({ x: e.clientX, y: e.clientY });
-      });
+    const handleMove = (e) => {
+      mouseX.set(e.clientX - 10);
+      mouseY.set(e.clientY - 10);
+      setVisible(true);
     };
+    const handleLeave = () => setVisible(false);
 
-    window.addEventListener('mousemove', handleMouseMove);
-    
+    window.addEventListener('pointermove', handleMove, { passive: true });
+    document.documentElement.addEventListener('pointerleave', handleLeave);
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
+      window.removeEventListener('pointermove', handleMove);
+      document.documentElement.removeEventListener('pointerleave', handleLeave);
     };
-  }, []);
+  }, [mouseX, mouseY]);
 
+  return (
+    <motion.div
+      className={`custom-cursor ${visible ? '' : 'cursor-hidden'}`}
+      style={{ x, y }}
+    />
+  );
+}
+
+function App() {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className="App">
-        <motion.div
-          className="custom-cursor"
-          animate={{
-            x: cursorPos.x - 10,
-            y: cursorPos.y - 10,
-          }}
-          transition={{
-            type: "spring",
-            damping: 20,
-            stiffness: 400,
-            mass: 0.2
-          }}
-        />
+        <CustomCursor />
 
         <ScrollToTop />
         <Navigation />

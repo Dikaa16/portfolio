@@ -1132,6 +1132,9 @@ html {
 /* CUSTOM CURSOR - RING ONLY */
 .custom-cursor {
   position: fixed;
+  top: 0;
+  left: 0;
+  will-change: transform;
   width: 20px;
   height: 20px;
   border: 2px solid var(--accent);
