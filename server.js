@@ -12,6 +12,8 @@ import { BlogPost, Photography, Video, Experience, Project, Skill, Course, Creat
 
 dotenv.config();
 const app = express();
+// Behind Render's proxy: use the client IP from X-Forwarded-For so rate limits are per visitor
+app.set('trust proxy', 1);
 app.use(helmet());
 
 app.use(cors({
@@ -50,6 +52,7 @@ const limiter = rateLimit({
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: process.env.NODE_ENV === 'production' ? 5 : 50,
+  skipSuccessfulRequests: true,
   message: { message: 'Too many login attempts' }
 });
 
