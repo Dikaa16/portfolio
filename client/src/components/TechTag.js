@@ -4,9 +4,10 @@ import { techIconUrl } from '../lib/techIcons';
 const hideOnError = (e) => { e.target.style.display = 'none'; };
 
 function TechTag({ name }) {
+  const icon = techIconUrl(name);
   return (
     <span className="tech-tag">
-      <img src={techIconUrl(name)} alt={name} className="tech-icon" onError={hideOnError} />
+      {icon && <img src={icon} alt="" className="tech-icon" onError={hideOnError} />}
       {name}
     </span>
   );
