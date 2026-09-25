@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import './App.css';
@@ -9,9 +9,11 @@ import Background from './components/Background';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Blog from './pages/Blog';
-import BlogPost from './pages/BlogPost';
 import Creatives from './pages/Creatives';
-import Admin from './pages/Admin';
+
+// Loaded on demand: markdown rendering and the admin panel are the heaviest parts
+const BlogPost = lazy(() => import('./pages/BlogPost'));
+const Admin = lazy(() => import('./pages/Admin'));
 
 function App() {
   return (
@@ -23,15 +25,17 @@ function App() {
         <Navigation />
         <Background />
         
-        <AnimatePresence mode="wait">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/creatives" element={<Creatives />} />
-            <Route path="/admin" element={<Admin />} />
-          </Routes>
-        </AnimatePresence>
+        <Suspense fallback={<div className="page"><div className="loading">Loading...</div></div>}>
+          <AnimatePresence mode="wait">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/creatives" element={<Creatives />} />
+              <Route path="/admin" element={<Admin />} />
+            </Routes>
+          </AnimatePresence>
+        </Suspense>
 
         <Footer />
       </div>

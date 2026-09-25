@@ -1,6 +1,7 @@
 import { Marked } from 'marked';
 import markedFootnote from 'marked-footnote';
-import hljs from 'highlight.js';
+// Common subset (~35 languages) instead of all ~190 keeps the bundle small
+import hljs from 'highlight.js/lib/common';
 import DOMPurify from 'dompurify';
 
 // =============================================
