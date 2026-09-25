@@ -182,7 +182,7 @@ function Admin() {
       showMessage('success', '✅ Deleted successfully!', 3000);
       loadItems();
     } catch (error) {
-      showMessage('error', `❌ Error: ${error.message}`);
+      showMessage('error', `❌ Error: ${actionErrorMessage(error)}`);
     }
   };
 
