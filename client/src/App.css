@@ -1907,13 +1907,6 @@ html {
 /* =============================================
    FOOTNOTES
    ============================================= */
-.blog-post-content [data-footnote-ref]::before {
-  content: '[';
-}
-.blog-post-content [data-footnote-ref]::after {
-  content: ']';
-}
-
 .blog-post-content [data-footnote-ref] {
   font-size: 0.75em;
   vertical-align: super;
@@ -1942,7 +1935,7 @@ html {
   margin-bottom: 0.5rem;
 }
 
-.blog-post-content section[data-footnotes] .data-footnote-backref {
+.blog-post-content section[data-footnotes] [data-footnote-backref] {
   font-family: var(--font-mono);
   text-decoration: none;
   color: var(--accent);
