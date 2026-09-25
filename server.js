@@ -199,7 +199,7 @@ app.put('/api/blog/:id', authMiddleware, async (req, res) => {
     if (req.body.published && !was.published && !req.body.publishedAt) {
       req.body.publishedAt = new Date();
     }
-    const post = await BlogPost.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const post = await BlogPost.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!post) return res.status(404).json({ message: 'Not found' });
     res.json(post);
   } catch (error) {
@@ -248,7 +248,7 @@ app.post('/api/photography', authMiddleware, async (req, res) => {
 
 app.put('/api/photography/:id', authMiddleware, async (req, res) => {
   try {
-    const photo = await Photography.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const photo = await Photography.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!photo) return res.status(404).json({ message: 'Not found' });
     res.json(photo);
   } catch (error) {
@@ -297,7 +297,7 @@ app.post('/api/videos', authMiddleware, async (req, res) => {
 
 app.put('/api/videos/:id', authMiddleware, async (req, res) => {
   try {
-    const video = await Video.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const video = await Video.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!video) return res.status(404).json({ message: 'Not found' });
     res.json(video);
   } catch (error) {
@@ -347,7 +347,7 @@ app.post('/api/experience', authMiddleware, async (req, res) => {
 
 app.put('/api/experience/:id', authMiddleware, async (req, res) => {
   try {
-    const exp = await Experience.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const exp = await Experience.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!exp) return res.status(404).json({ message: 'Not found' });
     res.json(exp);
   } catch (error) {
@@ -396,7 +396,7 @@ app.post('/api/projects', authMiddleware, async (req, res) => {
 
 app.put('/api/projects/:id', authMiddleware, async (req, res) => {
   try {
-    const project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!project) return res.status(404).json({ message: 'Not found' });
     res.json(project);
   } catch (error) {
@@ -445,7 +445,7 @@ app.post('/api/skills', authMiddleware, async (req, res) => {
 
 app.put('/api/skills/:id', authMiddleware, async (req, res) => {
   try {
-    const skill = await Skill.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const skill = await Skill.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!skill) return res.status(404).json({ message: 'Not found' });
     res.json(skill);
   } catch (error) {
@@ -494,7 +494,7 @@ app.post('/api/courses', authMiddleware, async (req, res) => {
 
 app.put('/api/courses/:id', authMiddleware, async (req, res) => {
   try {
-    const course = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const course = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!course) return res.status(404).json({ message: 'Not found' });
     res.json(course);
   } catch (error) {
@@ -543,7 +543,7 @@ app.post('/api/creatives', authMiddleware, async (req, res) => {
 
 app.put('/api/creatives/:id', authMiddleware, async (req, res) => {
   try {
-    const creative = await Creative.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const creative = await Creative.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!creative) return res.status(404).json({ message: 'Not found' });
     res.json(creative);
   } catch (error) {
