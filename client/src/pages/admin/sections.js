@@ -100,7 +100,9 @@ export const TABS = [
     id: 'creatives', label: 'Creatives', heading: 'Creatives Settings',
     intro: 'Manage photography, videos, and other creative content. Only featured items appear on the Creatives page.',
     sections: ['photo', 'video', 'others']
-  }
+  },
+  // A tab with `view` renders its own screen instead of content sections
+  { id: 'appearance', label: 'Appearance', view: 'appearance', sections: [] }
 ];
 
 // Fields edited as "a | b | c" text but stored as arrays

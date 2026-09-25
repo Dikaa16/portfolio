@@ -4,6 +4,7 @@ import { SECTIONS, TABS, toPayload, toFormData } from './admin/sections';
 import AdminLogin from './admin/AdminLogin';
 import ItemList from './admin/ItemList';
 import FilterBar from './admin/FilterBar';
+import ThemePicker from './admin/ThemePicker';
 import './Admin.css';
 
 const DEFAULT_FILTERS = { type: 'work', category: 'all', tag: 'all' };
@@ -36,6 +37,7 @@ function AdminHelp() {
         <li><strong>Reorder:</strong> Use ↑ ↓ buttons to change order</li>
         <li><strong>Delimiter:</strong> Use <code>|</code> (pipe) to separate list items</li>
         <li><strong>Filters:</strong> Use tag/category filters in manage view to find items quickly</li>
+        <li><strong>Appearance:</strong> Preview a theme, then apply it to change the look of the whole site</li>
       </ul>
     </div>
   );
@@ -102,8 +104,8 @@ function Admin() {
   }, [section, showMessage]);
 
   useEffect(() => {
-    if (isAuthenticated && viewMode === 'manage') loadItems();
-  }, [isAuthenticated, viewMode, loadItems]);
+    if (isAuthenticated && viewMode === 'manage' && !tab.view) loadItems();
+  }, [isAuthenticated, viewMode, loadItems, tab.view]);
 
   const resetView = () => {
     setViewMode('manage');
@@ -115,8 +117,9 @@ function Admin() {
   };
 
   const selectTab = (id) => {
+    const next = TABS.find(t => t.id === id);
     setTabId(id);
-    setSectionId(TABS.find(t => t.id === id).sections[0]);
+    if (next.sections.length) setSectionId(next.sections[0]);
     resetView();
   };
 
@@ -241,55 +244,59 @@ function Admin() {
 
       <TabBar tabs={TABS} active={tabId} onSelect={selectTab} />
 
-      {tab.heading && (
+      {tab.view === 'appearance' ? <ThemePicker /> : (
         <>
-          <h2>{tab.heading}</h2>
-          <p className="admin-intro">{tab.intro}</p>
-        </>
-      )}
+          {tab.heading && (
+            <>
+              <h2>{tab.heading}</h2>
+              <p className="admin-intro">{tab.intro}</p>
+            </>
+          )}
 
-      {subTabs.length > 1 && (
-        <TabBar tabs={subTabs} active={sectionId} onSelect={selectSection} className="admin-tabs admin-subtabs" />
-      )}
+          {subTabs.length > 1 && (
+            <TabBar tabs={subTabs} active={sectionId} onSelect={selectSection} className="admin-tabs admin-subtabs" />
+          )}
 
-      <div className="view-mode-toggle">
-        <button className={viewMode === 'create' ? 'active' : ''} onClick={startCreate}>
-          {editingId ? `Edit ${section.noun}` : `Create New ${section.noun}`}
-        </button>
-        <button className={viewMode === 'manage' ? 'active' : ''} onClick={showManage}>
-          Manage Existing {section.plural}
-        </button>
-      </div>
-
-      {viewMode === 'create' ? (
-        <form onSubmit={handleSubmit} className="admin-form">
-          <h2>{editingId ? `Edit ${section.noun}` : `${verb} ${section.noun}`}</h2>
-          <Form form={{ data: formData, onChange: handleChange, setField }} />
-          <div className="form-actions">
-            <button type="submit" className="submit-btn">{editingId ? 'Update' : verb} {section.noun}</button>
-            {showCancel && <button type="button" onClick={cancelEdit} className="btn-cancel">Cancel</button>}
+          <div className="view-mode-toggle">
+            <button className={viewMode === 'create' ? 'active' : ''} onClick={startCreate}>
+              {editingId ? `Edit ${section.noun}` : `Create New ${section.noun}`}
+            </button>
+            <button className={viewMode === 'manage' ? 'active' : ''} onClick={showManage}>
+              Manage Existing {section.plural}
+            </button>
           </div>
-        </form>
-      ) : (
-        <div className="manage-view">
-          <h2>Manage {section.plural}</h2>
-          <FilterBar
-            enabled={section.filters}
-            items={items}
-            shownCount={visibleItems.length}
-            filters={filters}
-            onChange={(change) => setFilters(prev => ({ ...prev, ...change }))}
-          />
-          <ItemList
-            items={visibleItems}
-            section={section}
-            loading={loading}
-            onCreate={startCreate}
-            onMove={handleMove}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        </div>
+
+          {viewMode === 'create' ? (
+            <form onSubmit={handleSubmit} className="admin-form">
+              <h2>{editingId ? `Edit ${section.noun}` : `${verb} ${section.noun}`}</h2>
+              <Form form={{ data: formData, onChange: handleChange, setField }} />
+              <div className="form-actions">
+                <button type="submit" className="submit-btn">{editingId ? 'Update' : verb} {section.noun}</button>
+                {showCancel && <button type="button" onClick={cancelEdit} className="btn-cancel">Cancel</button>}
+              </div>
+            </form>
+          ) : (
+            <div className="manage-view">
+              <h2>Manage {section.plural}</h2>
+              <FilterBar
+                enabled={section.filters}
+                items={items}
+                shownCount={visibleItems.length}
+                filters={filters}
+                onChange={(change) => setFilters(prev => ({ ...prev, ...change }))}
+              />
+              <ItemList
+                items={visibleItems}
+                section={section}
+                loading={loading}
+                onCreate={startCreate}
+                onMove={handleMove}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            </div>
+          )}
+        </>
       )}
 
       <AdminHelp />

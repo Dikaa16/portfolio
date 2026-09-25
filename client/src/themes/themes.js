@@ -66,7 +66,7 @@ export const THEMES = [
       'on-accent': '#031017',
       'glow-1': '#00e5ff',
       'glow-2': '#ff2bd6',
-      'glow-opacity': '0.18',
+      'glow-opacity': '0.14',
       'grid-line': 'rgba(0, 229, 255, 0.07)',
       'heading-glow': '0 0 24px rgba(0, 229, 255, 0.45)',
       'display-scale': '0.78',
