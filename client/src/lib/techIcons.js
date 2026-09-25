@@ -29,9 +29,23 @@ const normalize = (name) => name.toLowerCase().replace(/[\s.\-_]/g, '');
 
 const ICONS = Object.fromEntries(ICON_FILES.map(file => [normalize(file), file]));
 
-// URL of the icon for a technology, or null when there is none
+// Simple Icons (https://simpleicons.org) slug rules: "Chart.js" -> "chartdotjs",
+// "C++" -> "cplusplus", "Tailwind CSS" -> "tailwindcss"
+const simpleIconsSlug = (name) => name
+  .toLowerCase()
+  .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  .replace(/\+/g, 'plus')
+  .replace(/\./g, 'dot')
+  .replace(/&/g, 'and')
+  .replace(/#/g, 'sharp')
+  .replace(/[^a-z0-9]/g, '');
+
+// Icon URL for a technology: our own file when we have one, otherwise the
+// brand logo from the Simple Icons CDN (TechTag hides it if that 404s)
 export const techIconUrl = (tech) => {
   const key = normalize(tech);
   const file = ICONS[key] || ALIASES[key];
-  return file ? `/assets/icons/${encodeURIComponent(file)}.svg` : null;
+  if (file) return `/assets/icons/${encodeURIComponent(file)}.svg`;
+  const slug = simpleIconsSlug(tech);
+  return slug ? `https://cdn.simpleicons.org/${slug}` : null;
 };
