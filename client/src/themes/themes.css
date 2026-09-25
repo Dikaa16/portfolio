@@ -1,0 +1,42 @@
+/* =============================================
+   PER-THEME EXTRAS
+   Styling a theme needs beyond CSS variables. Scope every rule to
+   html[data-theme="<id>"] so other themes are unaffected.
+   ============================================= */
+
+/* Neon Grid: glowing edges, uppercase display type, gradient accent */
+html[data-theme="neon-grid"] .section-title,
+html[data-theme="neon-grid"] .page-title,
+html[data-theme="neon-grid"] .logo {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+html[data-theme="neon-grid"] .hero-title .accent {
+  background: linear-gradient(90deg, var(--glow-1), var(--glow-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+html[data-theme="neon-grid"] .experience-card:hover,
+html[data-theme="neon-grid"] .blog-card:hover,
+html[data-theme="neon-grid"] .video-card:hover,
+html[data-theme="neon-grid"] .others-card:hover,
+html[data-theme="neon-grid"] .courses-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 0 28px rgba(0, 229, 255, 0.25);
+}
+
+html[data-theme="neon-grid"] .btn:hover,
+html[data-theme="neon-grid"] .expand-btn:hover {
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.55);
+}
+
+html[data-theme="neon-grid"] .custom-cursor {
+  box-shadow: 0 0 12px var(--accent);
+}
+
+html[data-theme="neon-grid"] .photo-wrapper {
+  box-shadow: 0 0 0 1px var(--border), 0 20px 60px rgba(255, 43, 214, 0.15);
+}

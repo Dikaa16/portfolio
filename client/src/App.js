@@ -2,6 +2,8 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import './App.css';
+import './themes/themes.css';
+import { ThemeProvider } from './themes/ThemeContext';
 import CustomCursor from './components/CustomCursor';
 import ScrollToTop from './components/ScrollToTop';
 import Navigation from './components/Navigation';
@@ -17,29 +19,31 @@ const Admin = lazy(() => import('./pages/Admin'));
 
 function App() {
   return (
-    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <div className="App">
-        <CustomCursor />
+    <ThemeProvider>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <div className="App">
+          <CustomCursor />
 
-        <ScrollToTop />
-        <Navigation />
-        <Background />
+          <ScrollToTop />
+          <Navigation />
+          <Background />
         
-        <Suspense fallback={<div className="page"><div className="loading">Loading...</div></div>}>
-          <AnimatePresence mode="wait">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/creatives" element={<Creatives />} />
-              <Route path="/admin" element={<Admin />} />
-            </Routes>
-          </AnimatePresence>
-        </Suspense>
+          <Suspense fallback={<div className="page"><div className="loading">Loading...</div></div>}>
+            <AnimatePresence mode="wait">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/creatives" element={<Creatives />} />
+                <Route path="/admin" element={<Admin />} />
+              </Routes>
+            </AnimatePresence>
+          </Suspense>
 
-        <Footer />
-      </div>
-    </Router>
+          <Footer />
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 }
 

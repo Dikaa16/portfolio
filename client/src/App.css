@@ -16,6 +16,35 @@
   --font-display: 'Playfair Display', serif;
   --font-body: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+
+  /* Theme tokens. Defaults are the Classic theme; src/themes overrides them at runtime */
+  --surface-raised: #ffffff;
+  --on-accent: var(--secondary);
+  --nav-bg: color-mix(in srgb, var(--secondary) 95%, transparent);
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow-soft: rgba(0, 0, 0, 0.05);
+  --radius: 8px;
+  --heading-glow: none;
+  --display-scale: 1;
+  --glow-1: #d4af37;
+  --glow-2: #f4e4b3;
+  --glow-opacity: 0.08;
+  --grid-line: transparent;
+  --code-bg: #0d1117;
+  --code-text: #e6edf3;
+  --code-border: #30363d;
+  --danger: #d32f2f;
+  --callout-bg: #fffbea;
+  --callout-border: #f0e5c7;
+  --success-bg: #d4edda;
+  --success-text: #155724;
+  --success-border: #c3e6cb;
+  --error-bg: #f8d7da;
+  --error-text: #721c24;
+  --error-border: #f5c6cb;
+  --warning-bg: #fff3cd;
+  --warning-text: #856404;
+  --warning-border: #ffc107;
 }
 
 * {
@@ -31,6 +60,36 @@ body {
   background: var(--secondary);
   overflow-x: hidden;
   cursor: none;
+  transition: background-color 0.4s, color 0.4s;
+}
+
+/* Form controls follow the theme instead of the browser's white/black defaults */
+button,
+input,
+textarea,
+select {
+  color: inherit;
+}
+
+input,
+textarea,
+select {
+  background-color: var(--secondary);
+}
+
+/* Optional background patterns, chosen per theme */
+html[data-pattern="grid"] body {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-attachment: fixed;
+}
+
+html[data-pattern="dots"] body {
+  background-image: radial-gradient(var(--grid-line) 1px, transparent 1.5px);
+  background-size: 22px 22px;
+  background-attachment: fixed;
 }
 
 .App {
@@ -49,7 +108,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 5%;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--nav-bg);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
 }
@@ -61,6 +120,7 @@ body {
   text-decoration: none;
   color: var(--primary);
   letter-spacing: 0.05em;
+  text-shadow: var(--heading-glow);
 }
 
 .nav-links {
@@ -130,7 +190,8 @@ html {
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: 4.5rem;
+  font-size: calc(4.5rem * var(--display-scale));
+  text-shadow: var(--heading-glow);
   line-height: 1.2;
   margin-bottom: 1.5rem;
   color: var(--primary);
@@ -186,9 +247,9 @@ html {
 
 .photo-wrapper {
   position: relative;
-  border-radius: 8px;
+  border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+  box-shadow: 0 20px 60px var(--shadow-color);
 }
 
 .photo-wrapper img {
@@ -209,7 +270,8 @@ html {
 
 .section-title {
   font-family: var(--font-display);
-  font-size: 3rem;
+  font-size: calc(3rem * var(--display-scale));
+  text-shadow: var(--heading-glow);
   margin-bottom: 2.5rem;
   text-align: center;
   color: var(--primary);
@@ -226,7 +288,7 @@ html {
 
 .experience-card {
   background: var(--background);
-  border-radius: 8px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
   padding: 2rem;
   padding-bottom: 4rem;
@@ -237,7 +299,7 @@ html {
 }
 
 .experience-card:hover {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px var(--shadow-color);
   transform: translateY(-5px);
 }
 
@@ -246,7 +308,7 @@ html {
   width: 120px;
   height: 120px;
   margin: 0 auto 1.5rem;
-  border-radius: 8px;
+  border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--border);
 }
@@ -423,7 +485,7 @@ html {
 /* Courses Card (between Education and Skills) */
 .courses-card {
   background: var(--background);
-  border-radius: 8px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
   padding: 2rem;
   margin: 2rem auto;
@@ -483,7 +545,7 @@ html {
   height: 180px;
   margin: -2rem -2rem 1.5rem -2rem;
   overflow: hidden;
-  border-radius: 8px 8px 0 0;
+  border-radius: var(--radius) var(--radius) 0 0;
 }
 
 .project-card .project-image img {
@@ -493,7 +555,7 @@ html {
 }
 
 .courses-card:hover {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px var(--shadow-soft);
 }
 
 .courses-header {
@@ -585,7 +647,7 @@ html {
 
 .blog-card {
   background: var(--background);
-  border-radius: 8px;
+  border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--border);
   text-decoration: none;
@@ -595,7 +657,7 @@ html {
 }
 
 .blog-card:hover {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px var(--shadow-color);
   transform: translateY(-5px);
 }
 
@@ -648,7 +710,8 @@ html {
 
 .page-title {
   font-family: var(--font-display);
-  font-size: 4rem;
+  font-size: calc(4rem * var(--display-scale));
+  text-shadow: var(--heading-glow);
   margin-bottom: 1rem;
   color: var(--primary);
 }
@@ -760,13 +823,13 @@ html {
 .bg-circle {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.08;
+  opacity: var(--glow-opacity);
 }
 
 .bg-circle-1 {
   width: 600px;
   height: 600px;
-  background: linear-gradient(135deg, #d4af37 0%, #f4e4b3 100%);
+  background: linear-gradient(135deg, var(--glow-1) 0%, var(--glow-2) 100%);
   top: -200px;
   right: -200px;
 }
@@ -774,7 +837,7 @@ html {
 .bg-circle-2 {
   width: 800px;
   height: 800px;
-  background: linear-gradient(225deg, #d4af37 0%, #f4e4b3 100%);
+  background: linear-gradient(225deg, var(--glow-1) 0%, var(--glow-2) 100%);
   bottom: -300px;
   left: -300px;
 }
@@ -811,7 +874,7 @@ html {
     align-items: center;
     transform: translateX(100%);
     transition: transform 0.3s;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+    box-shadow: -5px 0 20px var(--shadow-color);
   }
 
   .nav-links.open {
@@ -869,7 +932,7 @@ html {
   }
 
   .hero-title {
-    font-size: 3rem;
+    font-size: calc(3rem * var(--display-scale));
   }
 
   .experience-grid {
@@ -881,7 +944,7 @@ html {
   }
 
   .section-title {
-    font-size: 2rem;
+    font-size: calc(2rem * var(--display-scale));
   }
 
   .skills-grid {
@@ -897,7 +960,7 @@ html {
   }
 
   .page-title {
-    font-size: 2.5rem;
+    font-size: calc(2.5rem * var(--display-scale));
   }
 
   .footer-content {
@@ -917,15 +980,15 @@ html {
   }
 
   .hero-title {
-    font-size: 2.5rem;
+    font-size: calc(2.5rem * var(--display-scale));
   }
 
   .page-title {
-    font-size: 2rem;
+    font-size: calc(2rem * var(--display-scale));
   }
 
   .section-title {
-    font-size: 1.75rem;
+    font-size: calc(1.75rem * var(--display-scale));
   }
 
   .btn {
@@ -1031,7 +1094,7 @@ html {
   height: auto;
   display: block;
   margin: 2rem auto;
-  border-radius: 8px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
 }
 
@@ -1044,7 +1107,7 @@ html {
   margin: 0 auto;
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
 }
 
@@ -1063,7 +1126,7 @@ html {
   padding: 1rem 1.5rem;
   margin: 2rem 0;
   background: var(--background);
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
   color: var(--text);
   font-style: italic;
 }
@@ -1104,19 +1167,19 @@ html {
   letter-spacing: 0.1em;
   color: #888;
   background: rgba(255,255,255,0.08);
-  border-radius: 0 8px 0 8px;
+  border-radius: 0 var(--radius) 0 var(--radius);
   z-index: 1;
 }
 
 .blog-post-content pre {
-  background: #0d1117;
-  color: #e6edf3;
+  background: var(--code-bg);
+  color: var(--code-text);
   padding: 1.5rem;
-  border-radius: 8px;
+  border-radius: var(--radius);
   overflow-x: auto;
   margin: 0;
   line-height: 1.6;
-  border: 1px solid #30363d;
+  border: 1px solid var(--code-border);
 }
 
 .blog-post-content pre code {
@@ -1348,7 +1411,7 @@ html {
 .filter-btn.active {
   border-color: var(--accent);
   background: var(--accent);
-  color: white;
+  color: var(--on-accent);
 }
 
 .section-no-results {
@@ -1388,7 +1451,7 @@ html {
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  border-radius: 8px;
+  border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--border);
 }
@@ -1509,7 +1572,7 @@ html {
 }
 
 .video-card {
-  border-radius: 8px;
+  border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--border);
   background: var(--background);
@@ -1517,7 +1580,7 @@ html {
 }
 
 .video-card:hover {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px var(--shadow-color);
   transform: translateY(-3px);
 }
 
@@ -1630,7 +1693,7 @@ html {
 }
 
 .others-card {
-  border-radius: 8px;
+  border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--border);
   background: var(--background);
@@ -1638,7 +1701,7 @@ html {
 }
 
 .others-card:hover {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px var(--shadow-color);
 }
 
 .others-card-image {
@@ -1803,7 +1866,7 @@ html {
 .blog-post-content .admonition {
   margin: 2rem 0;
   padding: 1.25rem 1.5rem;
-  border-radius: 8px;
+  border-radius: var(--radius);
   border-left: 4px solid;
 }
 
@@ -1823,85 +1886,57 @@ html {
   margin-bottom: 0;
 }
 
-/* Note / Info */
-.blog-post-content .admonition-note,
-.blog-post-content .admonition-info {
-  background: #e8f4fd;
-  border-left-color: #2196F3;
-}
-.blog-post-content .admonition-note .admonition-title,
-.blog-post-content .admonition-info .admonition-title {
-  color: #1565C0;
+/* Each type sets its colour, background and title colour; dark themes derive
+   the background and title from the colour so callouts stay readable */
+.blog-post-content .admonition {
+  background: var(--admon-bg);
+  border-left-color: var(--admon);
 }
 
-/* Tip / Success / Hint */
+.blog-post-content .admonition .admonition-title {
+  color: var(--admon-title);
+}
+
+.blog-post-content .admonition-note,
+.blog-post-content .admonition-info {
+  --admon: #2196F3; --admon-bg: #e8f4fd; --admon-title: #1565C0;
+}
+
 .blog-post-content .admonition-tip,
 .blog-post-content .admonition-success,
 .blog-post-content .admonition-hint {
-  background: #e8f5e9;
-  border-left-color: #4CAF50;
-}
-.blog-post-content .admonition-tip .admonition-title,
-.blog-post-content .admonition-success .admonition-title,
-.blog-post-content .admonition-hint .admonition-title {
-  color: #2E7D32;
+  --admon: #4CAF50; --admon-bg: #e8f5e9; --admon-title: #2E7D32;
 }
 
-/* Warning / Caution / Attention */
 .blog-post-content .admonition-warning,
 .blog-post-content .admonition-caution,
 .blog-post-content .admonition-attention {
-  background: #fff8e1;
-  border-left-color: #FF9800;
-}
-.blog-post-content .admonition-warning .admonition-title,
-.blog-post-content .admonition-caution .admonition-title,
-.blog-post-content .admonition-attention .admonition-title {
-  color: #E65100;
+  --admon: #FF9800; --admon-bg: #fff8e1; --admon-title: #E65100;
 }
 
-/* Danger / Error / Bug */
 .blog-post-content .admonition-danger,
 .blog-post-content .admonition-error,
 .blog-post-content .admonition-bug {
-  background: #fde8e8;
-  border-left-color: #F44336;
-}
-.blog-post-content .admonition-danger .admonition-title,
-.blog-post-content .admonition-error .admonition-title,
-.blog-post-content .admonition-bug .admonition-title {
-  color: #C62828;
+  --admon: #F44336; --admon-bg: #fde8e8; --admon-title: #C62828;
 }
 
-/* Example / Abstract / Question */
 .blog-post-content .admonition-example,
 .blog-post-content .admonition-abstract,
 .blog-post-content .admonition-question {
-  background: #f3e5f5;
-  border-left-color: #9C27B0;
-}
-.blog-post-content .admonition-example .admonition-title,
-.blog-post-content .admonition-abstract .admonition-title,
-.blog-post-content .admonition-question .admonition-title {
-  color: #6A1B9A;
+  --admon: #9C27B0; --admon-bg: #f3e5f5; --admon-title: #6A1B9A;
 }
 
-/* Quote */
 .blog-post-content .admonition-quote {
-  background: var(--background);
-  border-left-color: #78909C;
-}
-.blog-post-content .admonition-quote .admonition-title {
-  color: #37474F;
+  --admon: #78909C; --admon-bg: var(--background); --admon-title: #37474F;
 }
 
-/* Failure */
 .blog-post-content .admonition-failure {
-  background: #fce4ec;
-  border-left-color: #e91e63;
+  --admon: #e91e63; --admon-bg: #fce4ec; --admon-title: #880E4F;
 }
-.blog-post-content .admonition-failure .admonition-title {
-  color: #880E4F;
+
+html[data-mode="dark"] .blog-post-content .admonition {
+  --admon-bg: color-mix(in srgb, var(--admon) 14%, var(--background));
+  --admon-title: color-mix(in srgb, var(--admon) 65%, white);
 }
 
 /* =============================================

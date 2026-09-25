@@ -18,10 +18,10 @@
 }
 
 .login-box {
-  background: white;
+  background: var(--surface-raised);
   padding: 3rem;
   border: 2px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius);
   max-width: 400px;
   width: 100%;
   text-align: center;
@@ -61,7 +61,7 @@
 }
 
 .error-text {
-  color: #d32f2f;
+  color: var(--danger);
   text-align: center;
   margin-top: 0.5rem;
   margin-bottom: 1rem;
@@ -201,15 +201,15 @@
 
 .message.success,
 .status-badge.published {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background: var(--success-bg);
+  color: var(--success-text);
+  border: 1px solid var(--success-border);
 }
 
 .message.error {
-  background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+  background: var(--error-bg);
+  color: var(--error-text);
+  border: 1px solid var(--error-border);
 }
 
 .status-badge {
@@ -223,9 +223,9 @@
 }
 
 .status-badge.draft {
-  background: #fff3cd;
-  color: #856404;
-  border: 1px solid #ffc107;
+  background: var(--warning-bg);
+  color: var(--warning-text);
+  border: 1px solid var(--warning-border);
 }
 
 /* Manage view */
@@ -259,9 +259,9 @@
 }
 
 .item-card {
-  background: white;
+  background: var(--surface-raised);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius);
   padding: 1.5rem;
   display: flex;
   justify-content: space-between;
@@ -271,7 +271,7 @@
 }
 
 .item-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px var(--shadow-color);
   transform: translateY(-2px);
 }
 
@@ -365,25 +365,25 @@
 
 .btn-edit:hover {
   background: var(--accent);
-  color: white;
+  color: var(--on-accent);
 }
 
 .btn-delete {
-  border-color: #d32f2f;
-  color: #d32f2f;
+  border-color: var(--danger);
+  color: var(--danger);
 }
 
 .btn-delete:hover {
-  background: #d32f2f;
-  color: white;
+  background: var(--danger);
+  color: var(--secondary);
 }
 
 /* Forms */
 .admin-form {
-  background: white;
+  background: var(--surface-raised);
   padding: 3rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius);
   margin-bottom: 3rem;
 }
 
@@ -514,7 +514,7 @@
 .upload-btn {
   padding: 0.75rem 1.25rem;
   background: var(--accent);
-  color: white;
+  color: var(--on-accent);
   border: none;
   font-family: var(--font-mono);
   font-size: 0.8rem;
@@ -524,7 +524,7 @@
 }
 
 .upload-btn:disabled {
-  background: #ccc;
+  background: var(--border);
 }
 
 .drop-zone {
@@ -540,7 +540,7 @@
 
 .drop-zone.active {
   border-color: var(--accent);
-  background: #fffbea;
+  background: var(--callout-bg);
 }
 
 .upload-preview {
@@ -555,9 +555,9 @@
 
 /* Help */
 .admin-help {
-  background: #fffbea;
-  border: 1px solid #f0e5c7;
-  border-radius: 8px;
+  background: var(--callout-bg);
+  border: 1px solid var(--callout-border);
+  border-radius: var(--radius);
   padding: 2rem;
   margin-top: 3rem;
 }
