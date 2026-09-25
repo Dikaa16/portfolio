@@ -13,8 +13,16 @@ function AdminAuth({ onLogin }) {
       const response = await axios.post(`${API_URL}/api/admin/login`, { password });
       localStorage.setItem('adminToken', response.data.token);
      onLogin();
-    } catch {
-      setError('Incorrect password');
+    } catch (err) {
+      if (!err.response) {
+        setError('Cannot reach server. Please try again in a moment.');
+      } else if (err.response.status === 429) {
+        setError('Too many login attempts. Please wait 15 minutes.');
+      } else if (err.response.status === 401) {
+        setError('Incorrect password');
+      } else {
+        setError(err.response.data?.message || 'Login failed');
+      }
     }
   };
 
