@@ -16,18 +16,25 @@ function BlogPost() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Ignore a slower response for a post the reader already navigated away from
+    let current = true;
+    setLoading(true);
+    setError(null);
+    setPost(null);
+
     const fetchPost = async () => {
       try {
         const response = await api.get(`/blog/${slug}`);
-        setPost(response.data);
+        if (current) setPost(response.data);
       } catch (err) {
         console.error('Error fetching blog post:', err);
-        setError(loadErrorMessage(err, NOT_FOUND));
+        if (current) setError(loadErrorMessage(err, NOT_FOUND));
       } finally {
-        setLoading(false);
+        if (current) setLoading(false);
       }
     };
     fetchPost();
+    return () => { current = false; };
   }, [slug]);
 
   const html = useMemo(() => (post ? parseMarkdown(post.content) : ''), [post]);
