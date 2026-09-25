@@ -55,7 +55,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  cursor: none;
 }
 
 body {
@@ -63,7 +62,6 @@ body {
   color: var(--text);
   background: var(--secondary);
   overflow-x: hidden;
-  cursor: none;
   transition: background-color 0.4s, color 0.4s;
 }
 
@@ -227,7 +225,6 @@ html {
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  cursor: none;
   transition: all 0.3s;
   display: inline-block;
 }
@@ -415,7 +412,6 @@ html {
   border-radius: 50%;
   padding: 0;
   flex-shrink: 0;
-  cursor: none;
   transition: all 0.3s;
 }
 
@@ -566,7 +562,6 @@ html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  cursor: none;
 }
 
 .courses-header h3 {
@@ -891,7 +886,6 @@ html {
     gap: 6px;
     background: none;
     border: none;
-    cursor: none;
     z-index: 1001;
   }
 
@@ -1844,10 +1838,25 @@ html {
 }
 
 /* DESKTOP CURSOR LOCK - keep the system cursor hidden in every state
-   (active, disabled, file inputs) so only the custom cursor shows */
+   (active, disabled, file inputs) so only the custom cursor shows.
+   A transparent image is used instead of plain `none`, which Safari drops
+   after a click that navigates. CustomCursor briefly toggles
+   data-cursor-nudge after clicks/scrolls: switching between two equivalent
+   values forces Safari to re-apply the cursor without a mouse move. */
+:root {
+  --cursor-hidden: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4AWMAAQAABQABNtCI3QAAAABJRU5ErkJggg==") 0 0, none;
+  --cursor-hidden-alt: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E") 0 0, none;
+}
+
 @media (min-width: 969px) {
   *, *::before, *::after, ::file-selector-button {
-    cursor: none !important;
+    cursor: var(--cursor-hidden) !important;
+  }
+
+  html[data-cursor-nudge] *,
+  html[data-cursor-nudge] *::before,
+  html[data-cursor-nudge] *::after {
+    cursor: var(--cursor-hidden-alt) !important;
   }
 
   /* Native link/image dragging shows the OS cursor and ignores CSS */
@@ -1856,7 +1865,7 @@ html {
   }
 }
 
-/* MOBILE CURSOR OVERRIDE - must be last to override all cursor: none */
+/* MOBILE CURSOR OVERRIDE - must be last to override the desktop lock */
 @media (max-width: 968px) {
   *, *::before, *::after,
   body, a, button, input, textarea, select, label {
