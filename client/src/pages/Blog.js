@@ -78,7 +78,7 @@ function Blog() {
     <motion.div className="page" {...pageTransition}>
       <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
         <h1 className="page-title">Blog</h1>
-        <p className="page-subtitle">Exploring the chaos - one messy mind at a time</p>
+        <p className="page-subtitle">Exploring the chaos — one messy mind at a time</p>
       </motion.div>
 
       <div className="blog-filters">
