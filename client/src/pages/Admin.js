@@ -186,12 +186,16 @@ function Admin() {
     }
   };
 
+  // Swap with the neighbour the admin can see, not the next item in the
+  // unfiltered list (which may be hidden by a filter)
   const handleMove = async (item, direction) => {
-    const reordered = [...items];
-    const from = reordered.findIndex(i => i._id === item._id);
-    const to = from + direction;
-    if (from === -1 || to < 0 || to >= reordered.length) return;
+    const visible = items.filter(i => matchesFilters(i, section, filters));
+    const neighbour = visible[visible.indexOf(item) + direction];
+    if (!neighbour) return;
 
+    const reordered = [...items];
+    const from = reordered.indexOf(item);
+    const to = reordered.indexOf(neighbour);
     [reordered[from], reordered[to]] = [reordered[to], reordered[from]];
     const updates = reordered.map((i, order) => ({ id: i._id, order }));
 
