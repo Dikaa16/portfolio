@@ -57,7 +57,8 @@ app.use('/api/photography', createCrudRouter(Photography));
 app.use('/api/videos', createCrudRouter(Video));
 app.use('/api/experience', createCrudRouter(Experience, {
   sort: { order: 1, startDate: -1 },
-  listFilter: (req) => (req.query.type ? { type: req.query.type } : {})
+  // String() so ?type[$ne]=x cannot inject a query operator
+  listFilter: (req) => (req.query.type ? { type: String(req.query.type) } : {})
 }));
 app.use('/api/projects', createCrudRouter(Project, { sort: { order: 1, createdAt: -1 } }));
 app.use('/api/skills', createCrudRouter(Skill));

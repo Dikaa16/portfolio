@@ -42,7 +42,10 @@ const upload = multer({
 router.post('/upload', requireAuth, upload.single('image'), asyncHandler(async (req, res) => {
   if (!req.file) return res.status(400).json({ message: 'No image file provided' });
 
-  const folder = `portfolio/${req.query.folder || 'general'}`;
+  // Keep uploads inside portfolio/: only simple folder names are allowed
+  const requested = String(req.query.folder || 'general');
+  if (!/^[a-z0-9-]{1,40}$/i.test(requested)) return res.status(400).json({ message: 'Invalid folder' });
+  const folder = `portfolio/${requested}`;
   try {
     const result = await uploadImage(req.file.buffer, folder);
     res.json({
