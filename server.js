@@ -195,6 +195,7 @@ app.post('/api/blog', authMiddleware, async (req, res) => {
 app.put('/api/blog/:id', authMiddleware, async (req, res) => {
   try {
     const was = await BlogPost.findById(req.params.id).select('published');
+    if (!was) return res.status(404).json({ message: 'Not found' });
     if (req.body.published && !was.published && !req.body.publishedAt) {
       req.body.publishedAt = new Date();
     }
