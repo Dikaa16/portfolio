@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Marked } from 'marked';
 import markedFootnote from 'marked-footnote';
 import hljs from 'highlight.js';
+import DOMPurify from 'dompurify';
 import 'highlight.js/styles/github-dark.css';
 import { API_URL } from '../config';
 
@@ -108,10 +109,25 @@ marked.setOptions({
   gfm: true,
 });
 
-// Wrapper: preprocess admonitions, then parse
+// Embedded video iframes are allowed only from these hosts
+const IFRAME_HOSTS = ['www.youtube.com', 'www.youtube-nocookie.com', 'player.vimeo.com'];
+
+DOMPurify.addHook('uponSanitizeElement', (node, data) => {
+  if (data.tagName !== 'iframe') return;
+  try {
+    const { protocol, hostname } = new URL(node.getAttribute('src') || '');
+    if (protocol === 'https:' && IFRAME_HOSTS.includes(hostname)) return;
+  } catch {}
+  node.parentNode?.removeChild(node);
+});
+
+// Wrapper: preprocess admonitions, parse, then strip scripts/unsafe HTML
 function parseMarkdown(content) {
   const preprocessed = preprocessAdmonitions(content);
-  return marked.parse(preprocessed);
+  return DOMPurify.sanitize(marked.parse(preprocessed), {
+    ADD_TAGS: ['iframe'],
+    ADD_ATTR: ['loading', 'allow', 'allowfullscreen', 'frameborder'],
+  });
 }
 
 function BlogPost() {

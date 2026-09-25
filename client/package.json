@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^1.6.2",
+    "dompurify": "^3.4.16",
     "framer-motion": "^10.16.16",
     "highlight.js": "^11.11.1",
     "marked": "^11.1.0",
