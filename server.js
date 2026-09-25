@@ -89,6 +89,12 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
+// Log the real error, but don't expose internals to the client
+const serverError = (res, error) => {
+  console.error(error);
+  res.status(500).json({ message: 'Something went wrong' });
+};
+
 app.get('/api/health', (req, res) => res.json({ status: 'OK' }));
 
 cloudinary.config({
@@ -192,7 +198,7 @@ app.get('/api/blog', async (req, res) => {
     const posts = await BlogPost.find({ published: true }).sort({ publishedAt: -1 });
     res.json(posts);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -201,7 +207,7 @@ app.get('/api/blog/all', authMiddleware, async (req, res) => {
     const posts = await BlogPost.find().sort({ createdAt: -1 });
     res.json(posts);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -211,7 +217,7 @@ app.get('/api/blog/:slug', async (req, res) => {
     if (!post) return res.status(404).json({ message: 'Not found' });
     res.json(post);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -249,7 +255,7 @@ app.delete('/api/blog/:id', authMiddleware, async (req, res) => {
     cleanupImages(post);
     res.json({ message: 'Deleted' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -269,7 +275,7 @@ app.get('/api/photography', async (req, res) => {
     const photos = await Photography.find().sort({ order: 1 });
     res.json(photos);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -302,7 +308,7 @@ app.delete('/api/photography/:id', authMiddleware, async (req, res) => {
     cleanupImages(photo);
     res.json({ message: 'Deleted' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -322,7 +328,7 @@ app.get('/api/videos', async (req, res) => {
     const videos = await Video.find().sort({ order: 1 });
     res.json(videos);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -355,7 +361,7 @@ app.delete('/api/videos/:id', authMiddleware, async (req, res) => {
     cleanupImages(video);
     res.json({ message: 'Deleted' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -376,7 +382,7 @@ app.get('/api/experience', async (req, res) => {
     const exps = await Experience.find(query).sort({ order: 1, startDate: -1 });
     res.json(exps);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -409,7 +415,7 @@ app.delete('/api/experience/:id', authMiddleware, async (req, res) => {
     cleanupImages(exp);
     res.json({ message: 'Deleted' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -429,7 +435,7 @@ app.get('/api/projects', async (req, res) => {
     const projects = await Project.find().sort({ order: 1, createdAt: -1 });
     res.json(projects);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -462,7 +468,7 @@ app.delete('/api/projects/:id', authMiddleware, async (req, res) => {
     cleanupImages(project);
     res.json({ message: 'Deleted' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -482,7 +488,7 @@ app.get('/api/skills', async (req, res) => {
     const skills = await Skill.find().sort({ order: 1 });
     res.json(skills);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -511,7 +517,7 @@ app.delete('/api/skills/:id', authMiddleware, async (req, res) => {
     if (!skill) return res.status(404).json({ message: 'Not found' });
     res.json({ message: 'Deleted' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -531,7 +537,7 @@ app.get('/api/courses', async (req, res) => {
     const courses = await Course.find().sort({ order: 1 });
     res.json(courses);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -560,7 +566,7 @@ app.delete('/api/courses/:id', authMiddleware, async (req, res) => {
     if (!course) return res.status(404).json({ message: 'Not found' });
     res.json({ message: 'Deleted' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -580,7 +586,7 @@ app.get('/api/creatives', async (req, res) => {
     const creatives = await Creative.find().sort({ order: 1 });
     res.json(creatives);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
@@ -613,7 +619,7 @@ app.delete('/api/creatives/:id', authMiddleware, async (req, res) => {
     cleanupImages(creative);
     res.json({ message: 'Deleted' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 });
 
