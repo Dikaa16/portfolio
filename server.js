@@ -28,7 +28,8 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-app.use(express.json());
+// Default is 100kb, which a long blog post (markdown content) can exceed
+app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 const connectDB = async () => {
