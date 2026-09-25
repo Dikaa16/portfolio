@@ -10,7 +10,7 @@ function Footer() {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        <p>© 2025 Andika Sentosa Putra. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Andika Sentosa Putra. All rights reserved.</p>
         <div className="social-links">
           <a href="https://github.com/AndikaEsPe" target="_blank" rel="noopener noreferrer">GitHub</a>
           <a href="https://www.linkedin.com/in/andika-sentosa-putra-81448b213/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
