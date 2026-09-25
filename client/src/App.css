@@ -347,13 +347,32 @@ html {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  font-size: 1.5rem;
-  font-weight: bold;
+  padding: 0;
   cursor: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition: all 0.3s;
+}
+
+/* Plus/minus icon drawn with bars so it is always perfectly centered */
+.expand-btn::before,
+.expand-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 2.5px;
+  border-radius: 2px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s;
+}
+
+.expand-btn::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.expand-btn[aria-expanded="true"]::after {
+  transform: translate(-50%, -50%) rotate(0deg);
 }
 
 .expand-btn:hover {
@@ -436,7 +455,7 @@ html {
 }
 
 .education-card .expand-btn {
-  position: static !important;
+  position: relative !important;
   flex-shrink: 0;
   margin-left: auto;
 }

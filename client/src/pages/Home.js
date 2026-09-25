@@ -225,9 +225,9 @@ function Home() {
                     <button 
                       className="expand-btn"
                       onClick={() => toggleExperience(exp._id)}
-                    >
-                      {expandedExperience[exp._id] ? '−' : '+'}
-                    </button>
+                      aria-expanded={!!expandedExperience[exp._id]}
+                      aria-label={expandedExperience[exp._id] ? "Collapse" : "Expand"}
+                    ></button>
 
                     {expandedExperience[exp._id] && (
                       <motion.div
@@ -322,9 +322,9 @@ function Home() {
                     <button 
                       className="expand-btn"
                       onClick={() => toggleProject(project._id)}
-                    >
-                      {expandedProject[project._id] ? '−' : '+'}
-                    </button>
+                      aria-expanded={!!expandedProject[project._id]}
+                      aria-label={expandedProject[project._id] ? "Collapse" : "Expand"}
+                    ></button>
 
                     {expandedProject[project._id] && (
                       <motion.div
@@ -435,9 +435,9 @@ function Home() {
                   <button 
                     className="expand-btn"
                     onClick={() => toggleEducation(edu._id)}
-                  >
-                    {expandedEducation[edu._id] ? '−' : '+'}
-                  </button>
+                    aria-expanded={!!expandedEducation[edu._id]}
+                    aria-label={expandedEducation[edu._id] ? "Collapse" : "Expand"}
+                    ></button>
                 )}
               </motion.div>
             ))}
@@ -457,9 +457,12 @@ function Home() {
             <div className="courses-card">
               <div className="courses-header" onClick={() => setExpandedCourses(!expandedCourses)}>
                 <h3>Related Courses</h3>
-                <button className="expand-btn" style={{ position: 'static' }}>
-                  {expandedCourses ? '−' : '+'}
-                </button>
+                <button
+                  className="expand-btn"
+                  style={{ position: 'relative' }}
+                  aria-expanded={expandedCourses}
+                  aria-label={expandedCourses ? "Collapse" : "Expand"}
+                ></button>
               </div>
 
               {expandedCourses && (
@@ -555,9 +558,9 @@ function Home() {
                     <button 
                       className="expand-btn"
                       onClick={() => toggleVolunteer(vol._id)}
-                    >
-                      {expandedVolunteer[vol._id] ? '−' : '+'}
-                    </button>
+                      aria-expanded={!!expandedVolunteer[vol._id]}
+                      aria-label={expandedVolunteer[vol._id] ? "Collapse" : "Expand"}
+                    ></button>
 
                     {expandedVolunteer[vol._id] && (
                       <motion.div
