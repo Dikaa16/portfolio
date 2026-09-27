@@ -712,6 +712,17 @@
   border: 1px solid var(--border);
 }
 
+.picker-section-title {
+  margin-top: 3.5rem;
+}
+
+.background-preview {
+  position: relative;
+  height: 150px;
+  overflow: hidden;
+  background: var(--secondary);
+}
+
 /* Help */
 .admin-help {
   background: var(--callout-bg);

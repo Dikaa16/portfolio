@@ -2,28 +2,35 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
 import { api, authHeaders } from '../lib/api';
 import { DEFAULT_THEME_ID, getTheme } from './themes';
 import { AUTO_BACKGROUND_ID, resolveBackground } from './backgrounds';
-import { applyTheme, cachedThemeId, cacheThemeId } from './engine';
+import { applyTheme, cachedSetting, cacheSettings } from './engine';
 
 const ThemeContext = createContext(null);
 
-// siteThemeId: what every visitor sees (stored in the API)
-// previewId:   a theme the admin is trying out; only this browser sees it
+const initialSettings = () => ({
+  theme: cachedSetting('theme') || DEFAULT_THEME_ID,
+  background: cachedSetting('background') || AUTO_BACKGROUND_ID
+});
+
+// site:    { theme, background } every visitor sees (stored in the API)
+// preview: the parts the admin is trying out; only this browser sees them
 export function ThemeProvider({ children }) {
-  const [siteThemeId, setSiteThemeId] = useState(() => cachedThemeId() || DEFAULT_THEME_ID);
-  const [previewId, setPreviewId] = useState(null);
+  const [site, setSite] = useState(initialSettings);
+  const [preview, setPreview] = useState({});
+
+  const updateSite = useCallback((settings) => {
+    setSite(settings);
+    cacheSettings(settings);
+  }, []);
 
   useEffect(() => {
     api.get('/settings')
-      .then(({ data }) => {
-        setSiteThemeId(data.theme);
-        cacheThemeId(data.theme);
-      })
-      .catch(error => console.error('Could not load site theme:', error));
-  }, []);
+      .then(({ data }) => updateSite(data))
+      .catch(error => console.error('Could not load site settings:', error));
+  }, [updateSite]);
 
-  const activeId = previewId ?? siteThemeId;
-  const theme = getTheme(activeId);
-  const background = resolveBackground(AUTO_BACKGROUND_ID, theme);
+  const active = { ...site, ...preview };
+  const theme = getTheme(active.theme);
+  const background = resolveBackground(active.background, theme);
 
   useEffect(() => {
     applyTheme(theme);
@@ -33,17 +40,25 @@ export function ThemeProvider({ children }) {
     document.documentElement.dataset.background = background.id;
   }, [background]);
 
-  const saveTheme = useCallback(async (id) => {
-    const { data } = await api.put('/settings', { theme: id }, authHeaders());
-    setSiteThemeId(data.theme);
-    cacheThemeId(data.theme);
-    setPreviewId(null);
-  }, []);
+  // Previewing the live value again drops that part of the preview
+  const previewSettings = useCallback((changes) => {
+    setPreview(current => {
+      const next = { ...current, ...changes };
+      Object.keys(next).forEach(name => { if (next[name] === site[name]) delete next[name]; });
+      return next;
+    });
+  }, [site]);
 
-  const cancelPreview = useCallback(() => setPreviewId(null), []);
+  const cancelPreview = useCallback(() => setPreview({}), []);
+
+  const savePreview = useCallback(async () => {
+    const { data } = await api.put('/settings', preview, authHeaders());
+    updateSite(data);
+    setPreview({});
+  }, [preview, updateSite]);
 
   return (
-    <ThemeContext.Provider value={{ siteThemeId, previewId, activeId, background, previewTheme: setPreviewId, cancelPreview, saveTheme }}>
+    <ThemeContext.Provider value={{ site, preview, active, theme, background, previewSettings, cancelPreview, savePreview }}>
       {children}
     </ThemeContext.Provider>
   );

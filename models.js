@@ -318,6 +318,12 @@ const settingsSchema = new mongoose.Schema({
     type: String,
     default: 'classic',
     match: /^[a-z0-9-]{1,40}$/
+  },
+  // Background id from the client's registry, or 'auto' for the theme's own default
+  background: {
+    type: String,
+    default: 'auto',
+    match: /^[a-z0-9-]{1,40}$/
   }
 }, {
   timestamps: true

@@ -37,7 +37,7 @@ function AdminHelp() {
         <li><strong>Reorder:</strong> Use ↑ ↓ buttons to change order</li>
         <li><strong>Delimiter:</strong> Use <code>|</code> (pipe) to separate list items</li>
         <li><strong>Filters:</strong> Use tag/category filters in manage view to find items quickly</li>
-        <li><strong>Appearance:</strong> Preview a theme, then apply it to change the look of the whole site</li>
+        <li><strong>Appearance:</strong> Preview a theme and a background, then apply them to change the look of the whole site</li>
       </ul>
     </div>
   );

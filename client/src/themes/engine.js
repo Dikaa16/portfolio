@@ -70,21 +70,23 @@ export function applyTheme(theme) {
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme.colors.secondary);
 }
 
-// Last theme this browser saw, so returning visitors get it on first paint
-const CACHE_KEY = 'siteTheme';
+// Last settings this browser saw, so returning visitors get them on first paint
+const CACHE_KEYS = { theme: 'siteTheme', background: 'siteBackground' };
 
-export const cachedThemeId = () => {
+export const cachedSetting = (name) => {
   try {
-    return localStorage.getItem(CACHE_KEY);
+    return localStorage.getItem(CACHE_KEYS[name]);
   } catch {
     return null;
   }
 };
 
-export const cacheThemeId = (id) => {
+export const cacheSettings = (settings) => {
   try {
-    localStorage.setItem(CACHE_KEY, id);
+    Object.entries(CACHE_KEYS).forEach(([name, key]) => {
+      if (settings[name]) localStorage.setItem(key, settings[name]);
+    });
   } catch {
-    // Storage unavailable (private mode); the theme still applies for this visit
+    // Storage unavailable (private mode); the settings still apply for this visit
   }
 };
