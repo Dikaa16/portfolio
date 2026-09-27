@@ -1,34 +1,15 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { useTheme } from '../themes/ThemeContext';
 
-// Slowly drifting decorative circles behind all pages
-function Background() {
+// The layer behind every page. `thumbnail` renders it inside its parent
+// (for the admin picker) instead of fixed to the viewport.
+function Background({ background, thumbnail = false }) {
+  const { background: active } = useTheme();
+  const { id, Component } = background || active;
+  if (!Component) return null;
   return (
-    <div className="bg-elements">
-      <motion.div 
-        className="bg-circle bg-circle-1"
-        animate={{
-          scale: [1, 1.2, 1],
-          rotate: [0, 90, 0],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
-      <motion.div 
-        className="bg-circle bg-circle-2"
-        animate={{
-          scale: [1, 1.3, 1],
-          rotate: [0, -90, 0],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
+    <div className={`bg-elements bg-${id} ${thumbnail ? 'bg-thumbnail' : ''}`} aria-hidden="true">
+      <Component />
     </div>
   );
 }

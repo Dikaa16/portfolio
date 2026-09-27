@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import './App.css';
 import './themes/themes.css';
+import './themes/backgrounds.css';
 import { ThemeProvider } from './themes/ThemeContext';
 import CustomCursor from './components/CustomCursor';
 import ScrollToTop from './components/ScrollToTop';

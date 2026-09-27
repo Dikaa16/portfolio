@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { api, authHeaders } from '../lib/api';
 import { DEFAULT_THEME_ID, getTheme } from './themes';
+import { AUTO_BACKGROUND_ID, resolveBackground } from './backgrounds';
 import { applyTheme, cachedThemeId, cacheThemeId } from './engine';
 
 const ThemeContext = createContext(null);
@@ -21,10 +22,16 @@ export function ThemeProvider({ children }) {
   }, []);
 
   const activeId = previewId ?? siteThemeId;
+  const theme = getTheme(activeId);
+  const background = resolveBackground(AUTO_BACKGROUND_ID, theme);
 
   useEffect(() => {
-    applyTheme(getTheme(activeId));
-  }, [activeId]);
+    applyTheme(theme);
+  }, [theme]);
+
+  useEffect(() => {
+    document.documentElement.dataset.background = background.id;
+  }, [background]);
 
   const saveTheme = useCallback(async (id) => {
     const { data } = await api.put('/settings', { theme: id }, authHeaders());
@@ -36,7 +43,7 @@ export function ThemeProvider({ children }) {
   const cancelPreview = useCallback(() => setPreviewId(null), []);
 
   return (
-    <ThemeContext.Provider value={{ siteThemeId, previewId, activeId, previewTheme: setPreviewId, cancelPreview, saveTheme }}>
+    <ThemeContext.Provider value={{ siteThemeId, previewId, activeId, background, previewTheme: setPreviewId, cancelPreview, saveTheme }}>
       {children}
     </ThemeContext.Provider>
   );

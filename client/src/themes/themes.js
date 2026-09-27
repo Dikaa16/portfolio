@@ -1,7 +1,8 @@
 // Theme registry. To add a theme, append an object to THEMES:
 //   id          short slug stored in the database (a-z, 0-9, -)
 //   mode        'light' | 'dark' (dark themes get dark-safe status and callout colours)
-//   pattern     'none' | 'grid' | 'dots' background pattern
+//   pattern     'none' | 'grid' | 'dots' texture on the page itself
+//   background  default background art (an id from backgrounds.js); the admin can override it
 //   colors      the core palette, used for both the site and the admin preview card
 //   fonts       display/body/mono stacks + Google Fonts URL (null if already in index.html)
 //   tokens      optional overrides for any other CSS variable in App.css :root
@@ -17,6 +18,7 @@ export const THEMES = [
     description: 'The original look: crisp white, charcoal type and a touch of gold.',
     mode: 'light',
     pattern: 'none',
+    background: 'circles',
     colors: {
       primary: '#1a1a1a',
       secondary: '#ffffff',
@@ -49,6 +51,7 @@ export const THEMES = [
     description: 'Dark techno: midnight navy, electric cyan, magenta glow and a blueprint grid.',
     mode: 'dark',
     pattern: 'grid',
+    background: 'circles',
     colors: {
       primary: '#eaf6ff',
       secondary: '#05070d',
@@ -85,6 +88,7 @@ export const THEMES = [
     description: 'Botanical calm: linen paper, sage green and graceful serif type.',
     mode: 'light',
     pattern: 'dots',
+    background: 'circles',
     colors: {
       primary: '#1f2a24',
       secondary: '#f6f3ec',
@@ -114,6 +118,7 @@ export const THEMES = [
     description: 'Warm and editorial: sun-baked clay, blush sand and bold serif headlines.',
     mode: 'light',
     pattern: 'none',
+    background: 'circles',
     colors: {
       primary: '#2b1b16',
       secondary: '#fdf7f2',
@@ -143,6 +148,7 @@ export const THEMES = [
     description: 'Evening elegance: deep plum velvet with rose-gold accents.',
     mode: 'dark',
     pattern: 'none',
+    background: 'circles',
     colors: {
       primary: '#f6efff',
       secondary: '#121019',
