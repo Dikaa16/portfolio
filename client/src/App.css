@@ -1838,10 +1838,13 @@ html {
    A transparent image is used instead of plain `none`, which Safari drops
    after a click that navigates. CustomCursor briefly toggles
    data-cursor-nudge after clicks/scrolls: switching between two equivalent
-   values forces Safari to re-apply the cursor without a mouse move. */
+   values forces Safari to re-apply the cursor without a mouse move.
+   Both use the same 2x2 transparent image and only move the hotspot, so the
+   switch never waits on a new image (Safari shows the arrow while it does). */
 :root {
-  --cursor-hidden: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4AWMAAQAABQABNtCI3QAAAABJRU5ErkJggg==") 0 0, none;
-  --cursor-hidden-alt: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E") 0 0, none;
+  --cursor-hidden-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAC0lEQVR42mNgQAcAABIAAeRVjecAAAAASUVORK5CYII=");
+  --cursor-hidden: var(--cursor-hidden-image) 0 0, none;
+  --cursor-hidden-alt: var(--cursor-hidden-image) 1 1, none;
 }
 
 /* Based on the pointer, not screen width: any mouse/trackpad gets the custom
