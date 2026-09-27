@@ -42,24 +42,56 @@ html[data-theme="neon-grid"] .hero-title .accent {
   color: transparent;
 }
 
-html[data-theme="neon-grid"] .experience-card:hover,
-html[data-theme="neon-grid"] .blog-card:hover,
-html[data-theme="neon-grid"] .video-card:hover,
-html[data-theme="neon-grid"] .others-card:hover,
-html[data-theme="neon-grid"] .courses-card:hover {
+/* Neon themes: cards, buttons and the cursor glow in the accent colour */
+:is(html[data-theme="neon-grid"], html[data-theme="synthwave"]) :is(
+  .experience-card, .blog-card, .video-card, .others-card, .courses-card
+):hover {
   border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent), 0 0 28px rgba(0, 229, 255, 0.25);
+  box-shadow: 0 0 0 1px var(--accent), 0 0 28px color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
-html[data-theme="neon-grid"] .btn:hover,
-html[data-theme="neon-grid"] .expand-btn:hover {
-  box-shadow: 0 0 18px rgba(0, 229, 255, 0.55);
+:is(html[data-theme="neon-grid"], html[data-theme="synthwave"]) :is(.btn, .expand-btn):hover {
+  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 55%, transparent);
 }
 
-html[data-theme="neon-grid"] .custom-cursor {
+:is(html[data-theme="neon-grid"], html[data-theme="synthwave"]) .custom-cursor {
   box-shadow: 0 0 12px var(--accent);
 }
 
 html[data-theme="neon-grid"] .photo-wrapper {
   box-shadow: 0 0 0 1px var(--border), 0 20px 60px rgba(255, 43, 214, 0.15);
+}
+
+/* Synthwave: chrome headings, a glowing neon script and uppercase display type */
+html[data-theme="synthwave"] :is(.section-title, .page-title, .logo) {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+html[data-theme="synthwave"] :is(.section-title, .page-title) {
+  background: linear-gradient(180deg, #ffffff 0%, #ffd1ea 48%, var(--accent) 52%, #8e3bd6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* text-shadow would show through the transparent glyphs */
+  text-shadow: none;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 45%, transparent));
+}
+
+html[data-theme="synthwave"] .hero-title .accent {
+  display: inline-block;
+  font-family: 'Mr Dafoe', cursive;
+  font-weight: 400;
+  font-size: 1.4em;
+  line-height: 1;
+  transform: rotate(-6deg);
+  color: #ffe3f2;
+  text-shadow:
+    0 0 4px var(--accent),
+    0 0 14px var(--accent),
+    0 0 32px color-mix(in srgb, var(--glow-2) 70%, transparent);
+}
+
+html[data-theme="synthwave"] .photo-wrapper {
+  box-shadow: 0 0 0 1px var(--border), 0 20px 60px color-mix(in srgb, var(--glow-1) 22%, transparent);
 }

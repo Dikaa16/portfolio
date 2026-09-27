@@ -172,6 +172,42 @@ export const THEMES = [
       'glow-opacity': '0.12',
       radius: '10px'
     }
+  },
+  {
+    id: 'synthwave',
+    name: 'Synthwave',
+    description: '80s retro: purple dusk, hot pink neon, a chrome script and a sunset over the grid.',
+    mode: 'dark',
+    pattern: 'none',
+    background: 'sunset-grid',
+    colors: {
+      primary: '#fff1fb',
+      secondary: '#12071f',
+      background: '#1a0b2e',
+      'surface-raised': '#210f3a',
+      text: '#e9dcf7',
+      'text-light': '#b7a3d6',
+      border: '#3b2266',
+      accent: '#ff4fa3'
+    },
+    fonts: {
+      display: "'Audiowide', sans-serif",
+      body: "'Outfit', sans-serif",
+      mono: "'Share Tech Mono', monospace",
+      href: googleFonts('Audiowide', 'Mr+Dafoe', 'Outfit:wght@400;500;700', 'Share+Tech+Mono')
+    },
+    tokens: {
+      'on-accent': '#1a0612',
+      'glow-1': '#ffb347',
+      'glow-2': '#ff3cac',
+      'glow-opacity': '0.16',
+      'heading-glow': '0 0 18px rgba(255, 79, 163, 0.55)',
+      'display-scale': '0.85',
+      radius: '6px',
+      'code-bg': '#0c0416',
+      'code-border': '#3b2266',
+      'nav-bg': 'color-mix(in srgb, var(--secondary) 82%, transparent)'
+    }
   }
 ];
 
