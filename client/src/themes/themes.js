@@ -208,6 +208,129 @@ export const THEMES = [
       'code-border': '#3b2266',
       'nav-bg': 'color-mix(in srgb, var(--secondary) 82%, transparent)'
     }
+  },
+  {
+    id: 'aurora',
+    name: 'Aurora Borealis',
+    description: 'Arctic night: a deep teal-black sky lit by mint and violet northern lights.',
+    mode: 'dark',
+    pattern: 'none',
+    background: 'aurora',
+    colors: {
+      primary: '#effffb',
+      secondary: '#06131a',
+      background: '#0a1c24',
+      'surface-raised': '#0e2530',
+      text: '#cfe6e2',
+      'text-light': '#8fb3ae',
+      border: '#1a3844',
+      accent: '#5eead4'
+    },
+    fonts: {
+      display: "'Syne', sans-serif",
+      body: "'Manrope', sans-serif",
+      mono: "'JetBrains Mono', monospace",
+      href: googleFonts('Syne:wght@600;700;800', 'Manrope:wght@400;500;700', 'JetBrains+Mono:wght@400;500;700')
+    },
+    tokens: {
+      'on-accent': '#04201b',
+      'glow-1': '#34d399',
+      'glow-2': '#a78bfa',
+      'glow-opacity': '0.12',
+      radius: '12px'
+    }
+  },
+  {
+    id: 'coastal',
+    name: 'Coastal Breeze',
+    description: 'Seaside light: sea-glass blues, sandy white and an easy-going serif.',
+    mode: 'light',
+    pattern: 'none',
+    background: 'waves',
+    colors: {
+      primary: '#0f2d3d',
+      secondary: '#f7fbfc',
+      background: '#edf5f7',
+      'surface-raised': '#ffffff',
+      text: '#27414d',
+      'text-light': '#51697a',
+      border: '#d3e4ea',
+      accent: '#0e7490'
+    },
+    fonts: {
+      display: "'Fraunces', serif",
+      body: "'Karla', sans-serif",
+      mono: "'IBM Plex Mono', monospace",
+      href: googleFonts('Fraunces:opsz,wght@9..144,600;9..144,700', 'Karla:wght@400;500;700', 'IBM+Plex+Mono:wght@400;500')
+    },
+    tokens: {
+      'glow-1': '#38bdf8',
+      'glow-2': '#0e7490',
+      'glow-opacity': '0.1',
+      radius: '16px'
+    }
+  },
+  {
+    id: 'deep-space',
+    name: 'Deep Space',
+    description: 'Cosmic night: a near-black void, periwinkle starlight and a hint of nebula pink.',
+    mode: 'dark',
+    pattern: 'none',
+    background: 'starfield',
+    colors: {
+      primary: '#f2f4ff',
+      secondary: '#05060b',
+      background: '#0a0c14',
+      'surface-raised': '#10131e',
+      text: '#d3d8ea',
+      'text-light': '#8f97b3',
+      border: '#1d2233',
+      accent: '#9db4ff'
+    },
+    fonts: {
+      display: "'Unbounded', sans-serif",
+      body: "'Inter', sans-serif",
+      mono: "'Space Mono', monospace",
+      href: googleFonts('Unbounded:wght@500;700', 'Inter:wght@400;600;700', 'Space+Mono:wght@400;700')
+    },
+    tokens: {
+      'on-accent': '#070a18',
+      'glow-1': '#9db4ff',
+      'glow-2': '#f0abfc',
+      'glow-opacity': '0.1',
+      'display-scale': '0.82',
+      radius: '10px'
+    }
+  },
+  {
+    id: 'paper-ink',
+    name: 'Paper & Ink',
+    description: 'Printed editorial: newsprint off-white, black ink and a single red stamp.',
+    mode: 'light',
+    pattern: 'none',
+    background: 'paper',
+    colors: {
+      primary: '#111111',
+      secondary: '#f4f1ea',
+      background: '#ece8de',
+      'surface-raised': '#faf8f3',
+      text: '#262421',
+      'text-light': '#5e5a53',
+      border: '#d6d0c2',
+      accent: '#b3261e'
+    },
+    fonts: {
+      display: "'Newsreader', serif",
+      body: "'Source Serif 4', serif",
+      mono: "'IBM Plex Mono', monospace",
+      href: googleFonts('Newsreader:opsz,wght@6..72,500;6..72,700', 'Source+Serif+4:opsz,wght@8..60,400;8..60,600', 'IBM+Plex+Mono:wght@400;500')
+    },
+    tokens: {
+      'glow-1': '#b3261e',
+      'glow-2': '#111111',
+      'glow-opacity': '0.06',
+      radius: '0px'
+    }
   }
 ];
 

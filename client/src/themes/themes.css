@@ -95,3 +95,21 @@ html[data-theme="synthwave"] .hero-title .accent {
 html[data-theme="synthwave"] .photo-wrapper {
   box-shadow: 0 0 0 1px var(--border), 0 20px 60px color-mix(in srgb, var(--glow-1) 22%, transparent);
 }
+
+/* Aurora Borealis: the hero accent shimmers from mint to violet */
+html[data-theme="aurora"] .hero-title .accent {
+  background: linear-gradient(90deg, var(--accent), var(--glow-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Paper & Ink: italic headline accent and printed rules under titles */
+html[data-theme="paper-ink"] .hero-title .accent {
+  font-style: italic;
+}
+
+html[data-theme="paper-ink"] :is(.section-title, .page-title) {
+  padding-bottom: 0.4em;
+  border-bottom: 3px double var(--primary);
+}
