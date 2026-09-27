@@ -6,25 +6,31 @@ import { motion, useMotionValue, useSpring } from 'framer-motion';
 const SPRING = { damping: 25, stiffness: 700, mass: 0.2 };
 
 // Safari can show the system arrow after a click, a scroll or a page change,
-// and keeps it until the mouse moves. Briefly switching to an equivalent
-// hidden-cursor value (see data-cursor-nudge in App.css) makes it re-apply
-// the hidden cursor. It is triggered by clicks (repeated, since navigation and
-// smooth scrolling land later), scrolling and content changes under the mouse.
+// and keeps it until the mouse moves. Switching between two equivalent
+// hidden-cursor values (see data-cursor-nudge in App.css) makes it re-apply
+// the hidden cursor. Each trigger flips the value immediately and again on the
+// next frame, catching resets Safari makes after the event is handled.
+// Triggered by mouse release, clicks (repeated, since navigation and smooth
+// scrolling land later), scrolling and content changes under the mouse.
 const CLICK_NUDGE_DELAYS_MS = [0, 150, 500, 1000];
-const NUDGE_HOLD_MS = 50;
 const FINE_POINTER = '(hover: hover) and (pointer: fine)';
 
-let nudgePending = false;
-const nudgeCursor = () => {
-  if (nudgePending) return;
-  nudgePending = true;
+const flipCursor = () => {
   const root = document.documentElement;
-  root.dataset.cursorNudge = '';
+  if ('cursorNudge' in root.dataset) delete root.dataset.cursorNudge;
+  else root.dataset.cursorNudge = '';
   getComputedStyle(document.body).getPropertyValue('cursor'); // apply the change now
-  setTimeout(() => {
-    delete root.dataset.cursorNudge;
-    nudgePending = false;
-  }, NUDGE_HOLD_MS);
+};
+
+let frameQueued = false;
+const nudgeCursor = () => {
+  flipCursor();
+  if (frameQueued) return;
+  frameQueued = true;
+  requestAnimationFrame(() => {
+    frameQueued = false;
+    flipCursor();
+  });
 };
 
 const nudgeAfterClick = () => {
@@ -57,6 +63,7 @@ function CustomCursor() {
       contentObserver.observe(document.body, { childList: true, subtree: true });
       listeners.push(
         [window, 'pointerdown', nudgeCursor, true],
+        [window, 'pointerup', nudgeCursor, true],
         [window, 'click', nudgeAfterClick, true],
         [window, 'scroll', nudgeCursor, { capture: true, passive: true }],
         [window, 'popstate', nudgeAfterClick],
