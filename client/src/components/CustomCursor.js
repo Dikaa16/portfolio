@@ -5,21 +5,30 @@ import { motion, useMotionValue, useSpring } from 'framer-motion';
 // animates the ring directly without re-rendering React.
 const SPRING = { damping: 25, stiffness: 700, mass: 0.2 };
 
-// Safari can show the system arrow after a click that navigates or scrolls,
+// Safari can show the system arrow after a click, a scroll or a page change,
 // and keeps it until the mouse moves. Briefly switching to an equivalent
 // hidden-cursor value (see data-cursor-nudge in App.css) makes it re-apply
-// the hidden cursor. Repeated because the navigation/scroll may land later.
-const NUDGE_DELAYS_MS = [0, 150, 500, 1000];
-
+// the hidden cursor. It is triggered by clicks (repeated, since navigation and
+// smooth scrolling land later), scrolling and content changes under the mouse.
+const CLICK_NUDGE_DELAYS_MS = [0, 150, 500, 1000];
 const NUDGE_HOLD_MS = 50;
+const FINE_POINTER = '(hover: hover) and (pointer: fine)';
 
+let nudgePending = false;
 const nudgeCursor = () => {
+  if (nudgePending) return;
+  nudgePending = true;
   const root = document.documentElement;
-  NUDGE_DELAYS_MS.forEach(delay => setTimeout(() => {
-    root.dataset.cursorNudge = '';
-    getComputedStyle(document.body).getPropertyValue('cursor'); // apply the change now
-    setTimeout(() => delete root.dataset.cursorNudge, NUDGE_HOLD_MS);
-  }, delay));
+  root.dataset.cursorNudge = '';
+  getComputedStyle(document.body).getPropertyValue('cursor'); // apply the change now
+  setTimeout(() => {
+    delete root.dataset.cursorNudge;
+    nudgePending = false;
+  }, NUDGE_HOLD_MS);
+};
+
+const nudgeAfterClick = () => {
+  CLICK_NUDGE_DELAYS_MS.forEach(delay => setTimeout(nudgeCursor, delay));
 };
 
 function CustomCursor() {
@@ -38,17 +47,27 @@ function CustomCursor() {
     };
     const handleLeave = () => setVisible(false);
 
-    window.addEventListener('pointermove', handleMove, { passive: true });
-    document.documentElement.addEventListener('pointerleave', handleLeave);
-    window.addEventListener('click', nudgeCursor, true);
-    window.addEventListener('popstate', nudgeCursor);
-    window.addEventListener('hashchange', nudgeCursor);
+    const listeners = [
+      [window, 'pointermove', handleMove, { passive: true }],
+      [document.documentElement, 'pointerleave', handleLeave]
+    ];
+    // Only added/removed elements matter; the ring's own style updates are attribute changes
+    const contentObserver = new MutationObserver(nudgeCursor);
+    if (window.matchMedia(FINE_POINTER).matches) {
+      contentObserver.observe(document.body, { childList: true, subtree: true });
+      listeners.push(
+        [window, 'pointerdown', nudgeCursor, true],
+        [window, 'click', nudgeAfterClick, true],
+        [window, 'scroll', nudgeCursor, { capture: true, passive: true }],
+        [window, 'popstate', nudgeAfterClick],
+        [window, 'hashchange', nudgeAfterClick]
+      );
+    }
+
+    listeners.forEach(([target, ...args]) => target.addEventListener(...args));
     return () => {
-      window.removeEventListener('pointermove', handleMove);
-      document.documentElement.removeEventListener('pointerleave', handleLeave);
-      window.removeEventListener('click', nudgeCursor, true);
-      window.removeEventListener('popstate', nudgeCursor);
-      window.removeEventListener('hashchange', nudgeCursor);
+      contentObserver.disconnect();
+      listeners.forEach(([target, ...args]) => target.removeEventListener(...args));
     };
   }, [mouseX, mouseY]);
 
