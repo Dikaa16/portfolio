@@ -1189,8 +1189,11 @@ html {
   text-align: left;
 }
 
+/* Header tinted with the accent and underlined, so it never matches a row */
 .blog-post-content th {
-  background: var(--background);
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface-raised));
+  border-bottom: 2px solid color-mix(in srgb, var(--accent) 60%, var(--border));
+  color: var(--primary);
   font-family: var(--font-mono);
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -1198,15 +1201,22 @@ html {
   font-weight: 600;
 }
 
-.blog-post-content tr:nth-child(even) {
-  background: var(--background);
+/* Zebra stripes on body rows only, a faint tint of the text colour */
+.blog-post-content tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--primary) 4%, transparent);
 }
 
-/* Horizontal rules */
+/* Horizontal rules: an accent line fading out at both ends */
 .blog-post-content hr {
+  height: 2px;
   border: none;
-  border-top: 2px solid var(--border);
   margin: 3rem 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--accent) 70%, transparent) 50%,
+    transparent
+  );
 }
 
 /* Strong and emphasis */
