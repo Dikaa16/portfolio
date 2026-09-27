@@ -45,9 +45,14 @@ const connectDB = async () => {
 
 connectDB();
 
+// One home page visit makes ~5 API calls and each admin tab one more, so
+// 100/15 min ran out during normal browsing. 1000/15 min (~1 request/second)
+// still stops scraping and floods; login has its own strict limit.
 app.use('/api/', rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: process.env.NODE_ENV === 'production' ? 100 : 1000,
+  limit: process.env.NODE_ENV === 'production' ? 1000 : 5000,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
   message: { message: 'Too many requests' }
 }));
 
