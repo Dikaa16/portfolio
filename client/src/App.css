@@ -1224,20 +1224,60 @@ html {
   color: var(--text-light);
 }
 
-/* Definition lists */
+/* Definition lists: bold term, definitions indented along an accent rule */
 .blog-post-content dl {
   margin: 1.5rem 0;
 }
 
 .blog-post-content dt {
   font-weight: 700;
-  margin-top: 1rem;
+  color: var(--primary);
+  margin-top: 1.25rem;
 }
 
 .blog-post-content dd {
-  margin-left: 2rem;
-  margin-bottom: 0.5rem;
+  margin: 0.35rem 0 0.5rem 0.25rem;
+  padding-left: 1.25rem;
+  border-left: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
 }
+
+.blog-post-content dd p {
+  margin-bottom: 0.75rem;
+}
+
+.blog-post-content dd > :last-child {
+  margin-bottom: 0;
+}
+
+/* ==Marked==, ++inserted++ and abbreviations, tinted by the theme */
+.blog-post-content mark {
+  padding: 0.05em 0.3em;
+  border-radius: 3px;
+  color: var(--primary);
+  background: color-mix(in srgb, var(--accent) 38%, transparent);
+}
+
+.blog-post-content ins {
+  text-decoration: underline 2px color-mix(in srgb, var(--accent) 70%, transparent);
+  text-underline-offset: 0.2em;
+}
+
+.blog-post-content abbr[title] {
+  text-decoration: underline dotted var(--accent-text);
+  text-underline-offset: 0.2em;
+}
+
+/* Sub/superscripts without stretching the line height */
+.blog-post-content sub,
+.blog-post-content sup {
+  position: relative;
+  font-size: 0.75em;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+.blog-post-content sup { top: -0.5em; }
+.blog-post-content sub { bottom: -0.25em; }
 
 
 /* =============================================
