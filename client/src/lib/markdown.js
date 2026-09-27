@@ -3,6 +3,7 @@ import markedFootnote from 'marked-footnote';
 // Common subset (~35 languages) instead of all ~190 keeps the bundle small
 import hljs from 'highlight.js/lib/common';
 import DOMPurify from 'dompurify';
+import { emojiExtension } from './emoji';
 
 // =============================================
 // Admonition icons
@@ -98,6 +99,7 @@ const marked = new Marked();
 
 marked.use({ renderer });
 marked.use(markedFootnote({ refMarkers: true }));
+marked.use(emojiExtension);
 
 marked.setOptions({
   breaks: true,
