@@ -16,7 +16,7 @@ dotenv.config();
 configureCloudinary();
 
 const app = express();
-// Behind Render's proxy: use the client IP from X-Forwarded-For so rate limits are per visitor
+// Behind nginx on the VPS (one proxy hop): use the client IP from X-Forwarded-For so rate limits are per visitor
 app.set('trust proxy', 1);
 app.use(helmet());
 
