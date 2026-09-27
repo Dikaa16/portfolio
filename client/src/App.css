@@ -1922,19 +1922,23 @@ html[data-mode="dark"] .blog-post-content .admonition {
 /* =============================================
    FOOTNOTES
    ============================================= */
-.blog-post-content [data-footnote-ref] {
+.blog-post-content .footnote-ref a {
   font-size: 0.75em;
-  vertical-align: super;
   text-decoration: none;
   color: var(--accent-text);
   font-weight: 600;
 }
 
-.blog-post-content [data-footnote-ref]:hover {
+.blog-post-content .footnote-ref a:hover {
   color: var(--primary);
 }
 
-.blog-post-content section[data-footnotes] {
+/* The section's own top border is the separator */
+.blog-post-content hr.footnotes-sep {
+  display: none;
+}
+
+.blog-post-content section.footnotes {
   margin-top: 3rem;
   padding-top: 1.5rem;
   border-top: 2px solid var(--border);
@@ -1942,15 +1946,15 @@ html[data-mode="dark"] .blog-post-content .admonition {
   color: var(--text-light);
 }
 
-.blog-post-content section[data-footnotes] ol {
+.blog-post-content .footnotes-list {
   padding-left: 1.5rem;
 }
 
-.blog-post-content section[data-footnotes] li {
+.blog-post-content .footnote-item {
   margin-bottom: 0.5rem;
 }
 
-.blog-post-content section[data-footnotes] [data-footnote-backref] {
+.blog-post-content .footnote-backref {
   font-family: var(--font-mono);
   text-decoration: none;
   color: var(--accent-text);

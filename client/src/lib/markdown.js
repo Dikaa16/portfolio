@@ -1,9 +1,15 @@
-import { Marked } from 'marked';
-import markedFootnote from 'marked-footnote';
+import MarkdownIt from 'markdown-it';
+import abbr from 'markdown-it-abbr';
+import deflist from 'markdown-it-deflist';
+import { full as emoji } from 'markdown-it-emoji';
+import footnote from 'markdown-it-footnote';
+import ins from 'markdown-it-ins';
+import mark from 'markdown-it-mark';
+import sub from 'markdown-it-sub';
+import sup from 'markdown-it-sup';
 // Common subset (~35 languages) instead of all ~190 keeps the bundle small
 import hljs from 'highlight.js/lib/common';
 import DOMPurify from 'dompurify';
-import { emojiExtension } from './emoji';
 
 // =============================================
 // Admonition icons
@@ -46,65 +52,64 @@ function preprocessAdmonitions(markdown) {
 }
 
 // =============================================
-// Custom renderer for other elements
+// markdown-it with the standard syntax plugins:
+// emoji, footnotes, definition lists, abbreviations,
+// ==mark==, ++ins++, ~sub~ and ^sup^
 // =============================================
-const renderer = {
-  image(href, title, text) {
-    const src = typeof href === 'object' ? href.href : href;
-    const altText = typeof href === 'object' ? href.text : text;
-    const titleText = typeof href === 'object' ? href.title : title;
-    const titleAttr = titleText ? ` title="${titleText}"` : '';
-    return `<figure class="blog-figure">
-      <img src="${src}" alt="${altText || ''}"${titleAttr} loading="lazy" />
-      ${altText ? `<figcaption>${altText}</figcaption>` : ''}
-    </figure>`;
-  },
-  table(header, body) {
-    return `<div class="blog-table-wrapper"><table>${header}${body}</table></div>`;
-  },
-  blockquote(quote) {
-    return `<blockquote class="blog-blockquote">${quote}</blockquote>`;
-  },
-  code(code, language) {
-    const codeStr = typeof code === 'object' ? code.text : code;
-    const lang = typeof code === 'object' ? code.lang : language;
-    
-    let highlighted;
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        highlighted = hljs.highlight(codeStr, { language: lang }).value;
-      } catch (e) {
-        highlighted = hljs.highlightAuto(codeStr).value;
-      }
-    } else {
-      try {
-        highlighted = hljs.highlightAuto(codeStr).value;
-      } catch (e) {
-        highlighted = codeStr
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;');
-      }
-    }
-    
-    const langLabel = lang ? `<span class="code-lang-label">${lang}</span>` : '';
-    return `<div class="code-block-wrapper">${langLabel}<pre><code class="hljs${lang ? ` language-${lang}` : ''}">${highlighted}</code></pre></div>`;
+const md = new MarkdownIt({
+  html: true,        // raw HTML is allowed; DOMPurify sanitizes the output
+  linkify: true,     // bare URLs become links
+  typographer: true, // smart quotes, dashes, (c) -> ©
+  breaks: true       // a single newline is a line break, as posts were written
+})
+  .use(emoji)
+  .use(footnote)
+  .use(deflist)
+  .use(abbr)
+  .use(mark)
+  .use(ins)
+  .use(sub)
+  .use(sup);
+
+const escapeHtml = md.utils.escapeHtml;
+
+const highlight = (code, lang) => {
+  try {
+    if (lang && hljs.getLanguage(lang)) return hljs.highlight(code, { language: lang }).value;
+    return hljs.highlightAuto(code).value;
+  } catch {
+    return escapeHtml(code);
   }
 };
 
-// =============================================
-// Create marked instance with all extensions
-// =============================================
-const marked = new Marked();
+// Fenced and indented code: highlighted, with a language label
+const renderCode = (code, lang) => {
+  const label = lang ? `<span class="code-lang-label">${escapeHtml(lang)}</span>` : '';
+  const langClass = lang ? ` language-${escapeHtml(lang)}` : '';
+  return `<div class="code-block-wrapper">${label}<pre><code class="hljs${langClass}">${highlight(code, lang)}</code></pre></div>\n`;
+};
 
-marked.use({ renderer });
-marked.use(markedFootnote({ refMarkers: true }));
-marked.use(emojiExtension);
+md.renderer.rules.fence = (tokens, idx) => {
+  const token = tokens[idx];
+  return renderCode(token.content, token.info.trim().split(/\s+/)[0]);
+};
+md.renderer.rules.code_block = (tokens, idx) => renderCode(tokens[idx].content, '');
 
-marked.setOptions({
-  breaks: true,
-  gfm: true,
-});
+// Images become figures, with the alt text as the caption
+md.renderer.rules.image = (tokens, idx) => {
+  const token = tokens[idx];
+  const alt = escapeHtml(token.content);
+  const title = token.attrGet('title');
+  const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
+  return `<figure class="blog-figure"><img src="${escapeHtml(token.attrGet('src'))}" alt="${alt}"${titleAttr} loading="lazy" />` +
+    `${alt ? `<figcaption>${alt}</figcaption>` : ''}</figure>`;
+};
+
+// Wide tables scroll inside a wrapper instead of stretching the page
+md.renderer.rules.table_open = () => '<div class="blog-table-wrapper"><table>\n';
+md.renderer.rules.table_close = () => '</table></div>\n';
+
+md.renderer.rules.blockquote_open = () => '<blockquote class="blog-blockquote">\n';
 
 // Embedded video iframes are allowed only from these hosts
 const IFRAME_HOSTS = ['www.youtube.com', 'www.youtube-nocookie.com', 'player.vimeo.com'];
@@ -120,8 +125,7 @@ DOMPurify.addHook('uponSanitizeElement', (node, data) => {
 
 // Wrapper: preprocess admonitions, parse, then strip scripts/unsafe HTML
 export function parseMarkdown(content) {
-  const preprocessed = preprocessAdmonitions(content);
-  return DOMPurify.sanitize(marked.parse(preprocessed), {
+  return DOMPurify.sanitize(md.render(preprocessAdmonitions(content)), {
     ADD_TAGS: ['iframe'],
     ADD_ATTR: ['loading', 'allow', 'allowfullscreen', 'frameborder'],
   });
