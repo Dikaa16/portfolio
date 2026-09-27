@@ -8,6 +8,11 @@
 // Colours come from the theme (--glow-1, --glow-2, --accent, ...), so a
 // background fits whichever theme it is paired with.
 import Circles from '../components/backgrounds/Circles';
+import SunsetGrid from '../components/backgrounds/SunsetGrid';
+import Starfield from '../components/backgrounds/Starfield';
+import Waves from '../components/backgrounds/Waves';
+import Aurora from '../components/backgrounds/Aurora';
+import Paper from '../components/backgrounds/Paper';
 
 export const BACKGROUNDS = [
   {
@@ -15,6 +20,36 @@ export const BACKGROUNDS = [
     name: 'Drifting Circles',
     description: 'Two soft gradient circles slowly drifting in opposite corners.',
     Component: Circles
+  },
+  {
+    id: 'sunset-grid',
+    name: 'Sunset Grid',
+    description: '80s synthwave: a striped sun on the horizon over a glowing grid floor.',
+    Component: SunsetGrid
+  },
+  {
+    id: 'starfield',
+    name: 'Starfield',
+    description: 'Layers of softly twinkling stars drifting past a faint nebula.',
+    Component: Starfield
+  },
+  {
+    id: 'waves',
+    name: 'Coastal Waves',
+    description: 'Gentle layered waves rolling along the bottom of the screen.',
+    Component: Waves
+  },
+  {
+    id: 'aurora',
+    name: 'Aurora',
+    description: 'Northern lights: soft colour bands swaying across the sky.',
+    Component: Aurora
+  },
+  {
+    id: 'paper',
+    name: 'Paper Grain',
+    description: 'Still, printed-paper texture with a faint vignette. No motion.',
+    Component: Paper
   },
   {
     id: 'none',
